@@ -1,0 +1,37 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="hello-world"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="hello-world-resources" name="hello-world Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="hello-world.css" location="/css/hello-world.css"/>
+        <resource type="download" name="hello-world.js" location="/js/hello-world.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>hello-world</context>
+    </web-resource>
+    
+    <web-item name="hello-action" key="hello-action-label" section="system.content.action/primary" weight="10">
+        <label key="Hello World"/>
+        <link linkId="hello-action">/plugins/helloWorld/hello.action</link>
+    </web-item>
+    
+    <xwork name="hello-world" key="hello-world">
+        <description>Hello World Page</description>
+        <package name="hello-world" extends="default" namespace="/plugins/helloWorld">
+            <action name="hello" class="jp.co.kodnet.plugins.sample.api.HelloWorldAction">
+                <result name="success" type="velocity">/hello_world.vm</result> 
+            </action>
+        </package>
+    </xwork>
+</atlassian-plugin>
