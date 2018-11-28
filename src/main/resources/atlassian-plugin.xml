@@ -47,6 +47,7 @@
             </action>
             <action name="output" class="jp.co.kodnet.plugins.sample.questionaire.OutputAction">
                 <result name="success" type="velocity">/output.vm</result>
+                <result name="error" type="velocity">/error.vm</result>
             </action>
         </package>
     </xwork>
