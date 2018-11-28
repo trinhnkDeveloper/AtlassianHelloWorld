@@ -29,7 +29,7 @@
     <xwork name="hello-world" key="hello-world">
         <description>Hello World Page</description>
         <package name="hello-world" extends="default" namespace="/plugins/helloWorld">
-            <action name="hello" class="jp.co.kodnet.plugins.sample.api.HelloWorldAction">
+            <action name="hello" class="jp.co.kodnet.plugins.sample.HelloWorld">
                 <result name="success" type="velocity">/hello_world.vm</result> 
             </action>
         </package>

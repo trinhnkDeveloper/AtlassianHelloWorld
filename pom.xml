@@ -135,8 +135,8 @@
     </build>
 
     <properties>
-        <confluence.version>6.12.0</confluence.version>
-        <confluence.data.version>6.12.0</confluence.data.version>
+        <confluence.version>5.7.3</confluence.version>
+        <confluence.data.version>5.7.3</confluence.data.version>
         <amps.version>6.3.21</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
@@ -145,34 +145,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.local.repo>C:\Applications\Atlassian\atlassian-plugin-sdk-6.3.12\repository</maven.local.repo>
     </properties>
-    
-    <repositories>
-    <repository>
-        <id>atlassian</id>
-        <name>Atlassian Repository</name>
-        <url>https://maven.atlassian.com/content/groups/public/</url>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-    </repository>
-</repositories>
-
-<pluginRepositories>
-    <pluginRepository>
-        <id>atlassian-public</id>
-        <url>https://m2proxy.atlassian.com/repository/public/</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-        </snapshots>
-    </pluginRepository>
-</pluginRepositories>
 
 </project>
