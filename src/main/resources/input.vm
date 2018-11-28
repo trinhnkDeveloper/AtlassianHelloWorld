@@ -7,7 +7,7 @@
     </head>
     <body>
         <h1>Who are you!?</h1>
-        <form method="GET" action="$req.contextPath/plugins/questionaire/output.action">
+        <form method="POST" action="$req.contextPath/plugins/questionaire/output.action">
             <input type="text" name="txtName" placeholder="Name...">
             <input type="submit" name="submit" value="submit">
         </form>
