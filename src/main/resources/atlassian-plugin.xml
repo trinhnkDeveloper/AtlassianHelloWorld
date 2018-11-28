@@ -9,6 +9,7 @@
 
     <!-- add our i18n resource -->
     <resource type="i18n" name="i18n" location="hello-world"/>
+  
     
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
@@ -22,8 +23,13 @@
     </web-resource>
     
     <web-item name="hello-action" key="hello-action-label" section="system.content.action/primary" weight="10">
-        <label key="Hello World"/>
+        <label key="hello.menu.label"/>
         <link linkId="hello-action">/plugins/helloWorld/hello.action</link>
+    </web-item>
+    
+    <web-item name="questionaire" key="questionaire-label" section="system.content.action/primary" weight="10">
+        <label key="questionaire.menu.label"/>
+        <link linkId="questionaire">/plugins/questionaire/input.action</link>
     </web-item>
     
     <xwork name="hello-world" key="hello-world">
@@ -31,6 +37,16 @@
         <package name="hello-world" extends="default" namespace="/plugins/helloWorld">
             <action name="hello" class="jp.co.kodnet.plugins.sample.HelloWorld">
                 <result name="success" type="velocity">/hello_world.vm</result> 
+            </action>
+        </package>
+    </xwork>
+    <xwork name="questionaire" key="questionaire">
+        <package name="questionaire" extends="default" namespace="/plugins/questionaire">
+            <action name="input" class="jp.co.kodnet.plugins.sample.questionaire.InputAction">
+                <result name="success" type="velocity">/input.vm</result>
+            </action>
+            <action name="output" class="jp.co.kodnet.plugins.sample.questionaire.OutputAction">
+                <result name="success" type="velocity">/output.vm</result>
             </action>
         </package>
     </xwork>

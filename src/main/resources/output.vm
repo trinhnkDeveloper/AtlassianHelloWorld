@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello $action.name</title>
+        <meta charset="UTF-8">
+        <meta name="decorator" content="alt.general">
+    </head>
+    <body>
+        <h1>Hello $action.name</h1>
+        <p>Welcome $action.name to Confluence Plugins</p>
+    </body>
+</html>
