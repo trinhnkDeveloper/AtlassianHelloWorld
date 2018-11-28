@@ -3,7 +3,7 @@
     <head>
         <title>Questionaire</title>
         <meta charset="UTF-8">
-        <meta name="decorator" content="alt.general">
+        <meta name="decorator" content="atl.general">
     </head>
     <body>
         <h1>Who are you!?</h1>
