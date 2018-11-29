@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AUI</title>
+        <meta charset="UTF-8">
+        <meta name="decorator" content="atl.general">
+        <link rel="stylesheet" href="css/hello-world.css">
+        <script src="js/hello-world.js"></script>
+    </head>
+    <body>
+        <form action="$req.contextPath/plugins/spacelist/create.action" method="POST">
+            <label for="txtSpaceName"></label>
+            <input type="text" name="txtSpaceName" placeholder="Space Name..."><br>
+            <label for="txtSpaceKey">Space Key</label>
+            <input type="text" name="txtSpaceKey" placeholder="Space Key..."><br>
+            <button type="submit">Submit</button>
+        </form>
+        <table class="mytable">
+            <thead>
+                <tr>
+                    <th>Name Space</th>
+                    <th>Home Page</th>
+                    <th>Description</th>
+                    <th>Display Title</th>
+                    <th>Key</th>
+                </tr>
+            </thead>
+            <tbody>
+                #foreach($value in $spaceManager.getAllSpaces())
+                <tr>
+                    <td>$value.getName()</td>
+                    <td>$value.getHomePage()</td>
+                    <td>$value.getDescription()</td>
+                    <td>$value.getDisplayTitle()</td>
+                    <td>$value.getKey()</td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+    </body>
+</html>

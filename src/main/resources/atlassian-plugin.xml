@@ -8,7 +8,7 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="hello-world"/>
+    <resource type="i18n" name="i18n" location="/resources/hello-world"/>
   
     
     <!-- add our web resources -->
@@ -20,6 +20,14 @@
         <resource type="download" name="images/" location="/images"/>
 
         <context>hello-world</context>
+    </web-resource>
+    
+     <web-resource key="com.atlassian.auiplugin:aui-forms" name="aui-dropdown2">
+        <resource type="download" name="avatar.css" location="/css/avatar.css"/>
+        <resource type="download" name="avatar.js" location="/js/avatar.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>atl.general</context>
     </web-resource>
     
     <web-item name="hello-action" key="hello-action-label" section="system.content.action/primary" weight="10">
@@ -38,6 +46,7 @@
             <action name="hello" class="jp.co.kodnet.plugins.sample.HelloWorld">
                 <result name="success" type="velocity">/hello_world.vm</result> 
             </action>
+            
         </package>
     </xwork>
     <xwork name="questionaire" key="questionaire">
@@ -48,6 +57,14 @@
             <action name="output" class="jp.co.kodnet.plugins.sample.questionaire.OutputAction">
                 <result name="success" type="velocity">/output.vm</result>
                 <result name="error" type="velocity">/error.vm</result>
+            </action>
+        </package>
+    </xwork>
+    <xwork name="spacelist" key="spacelist">
+        <package name="spacelist" extends="default" namespace="/plugins/spacelist">
+            <action name="view" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
+                <result name="success" type="velocity">/testingAUI.vm</result>
+                <result name="error" type="velocity">/hello_world.vm</result>
             </action>
         </package>
     </xwork>

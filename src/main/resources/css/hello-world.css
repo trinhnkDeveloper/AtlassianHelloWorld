@@ -1,0 +1,18 @@
+.mytable {
+    table-layout: fixed;
+}
+.mytable thead {
+    display: block;
+}
+.mytable tbody{
+    display: block
+}
+.mytable tr{
+    display: block;
+    border-bottom: 1px solid black;
+}
+.mytable th, td{
+    padding: 5px 5px;
+    font-size: 20px;
+    width: 30px;
+}
