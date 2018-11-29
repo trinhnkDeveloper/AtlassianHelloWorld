@@ -4,18 +4,19 @@
         <title>AUI</title>
         <meta charset="UTF-8">
         <meta name="decorator" content="atl.general">
-        <link rel="stylesheet" href="css/hello-world.css">
-        <script src="js/hello-world.js"></script>
+        #requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
     </head>
     <body>
-        <form action="$req.contextPath/plugins/spacelist/create.action" method="POST">
-            <label for="txtSpaceName"></label>
-            <input type="text" name="txtSpaceName" placeholder="Space Name..."><br>
-            <label for="txtSpaceKey">Space Key</label>
-            <input type="text" name="txtSpaceKey" placeholder="Space Key..."><br>
-            <button type="submit">Submit</button>
+        <form class="aui" action="$req.contextPath/confluence/plugins/spacelist/create.action">
+            <div class="field-group">
+                <label for="txtSpaceName">Space name<span class="aui-icon icon-required">required</span></label>
+                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" placeholder="Space Name..."><br>
+                <label for="txtSpaceKey">Space key<span class="aui-icon icon-required">required</span></label>
+                <input class="text" type="text" id="text-input" name="txtSpaceKey" placeholder="Space Key..."><br>
+                <button class="aui-button">Add</button>
+            </div>
         </form>
-        <table class="mytable">
+        <table class="aui">
             <thead>
                 <tr>
                     <th>Name Space</th>

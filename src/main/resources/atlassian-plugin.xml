@@ -14,20 +14,14 @@
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
-        
-        <resource type="download" name="hello-world.css" location="/css/hello-world.css"/>
-        <resource type="download" name="hello-world.js" location="/js/hello-world.js"/>
+        <dependency>com.atlassian.auiplugin:aui-table</dependency>
+        <dependency>com.atlassian.auiplugin:aui-forms</dependency>
+        <dependency>com.atlassian.auiplugin:aui-button </dependency>
+        <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
+        <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
 
         <context>hello-world</context>
-    </web-resource>
-    
-     <web-resource key="com.atlassian.auiplugin:aui-forms" name="aui-dropdown2">
-        <resource type="download" name="avatar.css" location="/css/avatar.css"/>
-        <resource type="download" name="avatar.js" location="/js/avatar.js"/>
-        <resource type="download" name="images/" location="/images"/>
-
-        <context>atl.general</context>
     </web-resource>
     
     <web-item name="hello-action" key="hello-action-label" section="system.content.action/primary" weight="10">
