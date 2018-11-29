@@ -40,7 +40,6 @@
             <action name="hello" class="jp.co.kodnet.plugins.sample.HelloWorld">
                 <result name="success" type="velocity">/hello_world.vm</result> 
             </action>
-            
         </package>
     </xwork>
     <xwork name="questionaire" key="questionaire">

@@ -10,9 +10,9 @@
         <form class="aui" action="$req.contextPath/confluence/plugins/spacelist/create.action">
             <div class="field-group">
                 <label for="txtSpaceName">Space name<span class="aui-icon icon-required">required</span></label>
-                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" placeholder="Space Name..."><br>
+                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" placeholder="Space Name..."><br><br>
                 <label for="txtSpaceKey">Space key<span class="aui-icon icon-required">required</span></label>
-                <input class="text" type="text" id="text-input" name="txtSpaceKey" placeholder="Space Key..."><br>
+                <input class="text" type="text" id="text-input" name="txtSpaceKey" placeholder="Space Key..."><br><br>
                 <button class="aui-button">Add</button>
             </div>
         </form>
