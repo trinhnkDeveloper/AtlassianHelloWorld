@@ -73,6 +73,7 @@
                         $("#message01").slideDown(1000);
                         $("#message01").addClass("space-name-error");
                         $("#body").append("Can phai nhap Space Name");
+                        $("#txtSpaceName").focus();
                     }
                 });
                 $("#txtSpaceKey").focusout(function () {
@@ -108,6 +109,7 @@
                         $("#message01").slideDown(1000);
                         $("#message01").addClass("space-key-error");
                         $("#body").append(message);
+                        $("#txtSpaceKey").focus();
                     }
                     
                 });
