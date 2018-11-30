@@ -7,13 +7,17 @@
         #requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
     </head>
     <body>
-        <form class="aui" action="$req.contextPath/confluence/plugins/spacelist/create.action">
+        <form class="aui" action="$req.contextPath/plugins/spacelist/create.action" method="POST">
             <div class="field-group">
                 <label for="txtSpaceName">Space name<span class="aui-icon icon-required">required</span></label>
-                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" placeholder="Space Name..."><br><br>
+                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" placeholder="Space Name..."><br>
+            </div>
+            <div class="field-group">
                 <label for="txtSpaceKey">Space key<span class="aui-icon icon-required">required</span></label>
-                <input class="text" type="text" id="text-input" name="txtSpaceKey" placeholder="Space Key..."><br><br>
-                <button class="aui-button">Add</button>
+                <input class="text" type="text" id="text-input" name="txtSpaceKey" placeholder="Space Key..."><br>
+            </div>
+            <div class="field-group">
+                <button class="aui-button">Add</button><button class="aui-button">Cancel</button>
             </div>
         </form>
         <table class="aui">

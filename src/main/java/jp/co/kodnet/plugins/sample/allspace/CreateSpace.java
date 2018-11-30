@@ -4,6 +4,7 @@ import aQute.bnd.annotation.component.Component;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.spaces.SpaceManager;
+import com.atlassian.confluence.user.ConfluenceUser;
 import com.atlassian.plugin.spring.scanner.annotation.component.Scanned;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork.ActionContext;
@@ -17,14 +18,9 @@ import com.opensymphony.xwork.ActionContext;
 public class CreateSpace extends ConfluenceActionSupport {
 
     private SpaceManager spaceManager = (SpaceManager) ContainerManager.getComponent("spaceManager");
-    private Space createSpace;
 
     public SpaceManager getSpaceManager() {
         return spaceManager;
-    }
-
-    public Space getCreateSpace() {
-        return createSpace;
     }
 
     private String getParameter(ActionContext context, String key) {
@@ -43,10 +39,14 @@ public class CreateSpace extends ConfluenceActionSupport {
         String spaceName = getParameter(context, "txtSpaceName");
         String spaceKey = getParameter(context, "txtSpaceKey");
 
-        Space space = new Space();
-        space.setName(spaceName);
-        space.setKey(spaceKey);
-        spaceManager.createSpace(space);
+        ConfluenceUser user = getAuthenticatedUser();
+        spaceManager.createSpace(spaceKey, spaceName, "new space", user);
         return SUCCESS;
     }
+
+    @Override
+    public ConfluenceUser getAuthenticatedUser() {
+        return super.getAuthenticatedUser();
+    }
+    
 }
