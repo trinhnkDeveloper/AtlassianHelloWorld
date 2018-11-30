@@ -43,33 +43,37 @@
             </tbody>
         </table>
         <script>
-            $(document).ready(function(){
-                $("#txtSpaceName").focusout(function(){
+            $(document).ready(function () {
+                $("#txtSpaceName").focusout(function () {
                     var temp = $("#txtSpaceName").val();
                     console.log(temp);
-                    if(temp.length <= 0){
+                    if (temp.length <= 0) {
                         console.log("invalid");
                     }
                 });
-                $("#txtSpaceKey").focusout(function(){
+                $("#txtSpaceKey").focusout(function () {
                     var temp = $("#txtSpaceKey").val();
                     var valid = true;
-                    if(temp.match(/^[a-zA-Z0-9]+$/) && temp.length <= 255){
+                    if (temp.match(/^[a-zA-Z0-9]+$/) && temp.length <= 255) {
                         var listKey = $(".spaceKey");
-                        for(var i = 0; i<listKey.length; i++){
-                            if(temp.match($(listKey[i]).text())){
+                        for (var i = 0; i < listKey.length; i++) {
+                            if (temp.match($(listKey[i]).text())) {
                                 valid = false;
                                 console.log(valid);
                                 break;
                             }
                         }
-                    }else{
+                    } else {
                         valid = false;
                         console.log("key invalid");
                     }
-                    if(valid){
+                    if (valid) {
                         console.log("key valid");
                     }
+                });
+                var myFlag = AJS.flag({
+                    type: 'success',
+                    body: $i18n.getText("plugin.lang.successMessage"),
                 });
             });
         </script>
