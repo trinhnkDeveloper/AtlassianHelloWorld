@@ -9,25 +9,25 @@
     <body>
         <form class="aui" action="$req.contextPath/plugins/spacelist/create.action" method="POST">
             <div class="field-group">
-                <label for="txtSpaceName">Space name<span class="aui-icon icon-required">required</span></label>
-                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" placeholder="Space Name..."><br>
+                <label for="txtSpaceName">$i18n.getText("plugin.lang.spaceName")<span class="aui-icon icon-required">required</span></label>
+                <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" required="true"><br>
             </div>
             <div class="field-group">
-                <label for="txtSpaceKey">Space key<span class="aui-icon icon-required">required</span></label>
-                <input class="text" type="text" id="text-input" name="txtSpaceKey" placeholder="Space Key..."><br>
+                <label for="txtSpaceKey">$i18n.getText("plugin.lang.spaceKey")<span class="aui-icon icon-required">required</span></label>
+                <input class="text" type="text" id="txtSpaceKey" name="txtSpaceKey" required="true"><br>
             </div>
             <div class="field-group">
-                <button class="aui-button">Add</button><button class="aui-button">Cancel</button>
+                <button class="aui-button">$i18n.getText("plugin.lang.add")</button><button class="aui-button">Cancel</button>
             </div>
         </form>
         <table class="aui">
             <thead>
                 <tr>
-                    <th>Name Space</th>
-                    <th>Home Page</th>
-                    <th>Description</th>
-                    <th>Display Title</th>
-                    <th>Key</th>
+                    <th>$i18n.getText("plugin.lang.spaceName")</th>
+                    <th>$i18n.getText("plugin.lang.homePage")</th>
+                    <th>$i18n.getText("plugin.lang.description")</th>
+                    <th>$i18n.getText("plugin.lang.displayTitle")</th>
+                    <th>$i18n.getText("plugin.lang.key")</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,10 +37,41 @@
                     <td>$value.getHomePage()</td>
                     <td>$value.getDescription()</td>
                     <td>$value.getDisplayTitle()</td>
-                    <td>$value.getKey()</td>
+                    <td class="spaceKey">$value.getKey()</td>
                 </tr>
                 #end
             </tbody>
         </table>
+        <script>
+            $(document).ready(function(){
+                $("#txtSpaceName").focusout(function(){
+                    var temp = $("#txtSpaceName").val();
+                    console.log(temp);
+                    if(temp.length <= 0){
+                        console.log("invalid");
+                    }
+                });
+                $("#txtSpaceKey").focusout(function(){
+                    var temp = $("#txtSpaceKey").val();
+                    var valid = true;
+                    if(temp.match(/^[a-zA-Z0-9]+$/) && temp.length <= 255){
+                        var listKey = $(".spaceKey");
+                        for(var i = 0; i<listKey.length; i++){
+                            if(temp.match($(listKey[i]).text())){
+                                valid = false;
+                                console.log(valid);
+                                break;
+                            }
+                        }
+                    }else{
+                        valid = false;
+                        console.log("key invalid");
+                    }
+                    if(valid){
+                        console.log("key valid");
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

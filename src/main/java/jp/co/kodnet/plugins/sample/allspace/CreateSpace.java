@@ -1,7 +1,6 @@
 package jp.co.kodnet.plugins.sample.allspace;
 
 import aQute.bnd.annotation.component.Component;
-import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.user.ConfluenceUser;

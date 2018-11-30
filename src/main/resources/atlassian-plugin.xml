@@ -8,15 +8,15 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="i18n" location="/resources/hello-world"/>
-  
-    
+    <resource type="i18n" name="en_EN_custom" location="/resources/en_EN_custom"/>
+
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         <dependency>com.atlassian.auiplugin:aui-table</dependency>
         <dependency>com.atlassian.auiplugin:aui-forms</dependency>
         <dependency>com.atlassian.auiplugin:aui-button </dependency>
+        <dependency>com.atlassian.auiplugin:aui-form-validation</dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
