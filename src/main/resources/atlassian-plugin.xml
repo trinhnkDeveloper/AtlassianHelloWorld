@@ -15,8 +15,8 @@
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         <dependency>com.atlassian.auiplugin:aui-table</dependency>
         <dependency>com.atlassian.auiplugin:aui-forms</dependency>
-        <dependency>com.atlassian.auiplugin:aui-button </dependency>
-        <dependency>com.atlassian.auiplugin:aui-form-validation</dependency>
+        <dependency>com.atlassian.auiplugin:aui-button</dependency>
+        <dependency>com.atlassian.auiplugin:aui-message</dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
@@ -60,7 +60,7 @@
                 <result name="error" type="velocity">/view/hello_world.vm</result>
             </action>
             <action name="create" class="jp.co.kodnet.plugins.sample.allspace.CreateSpace">
-                <result name="success" type="redirect">/testingAUI.vm</result>
+                <result name="success" type="redirect">/plugins/spacelist/view.action</result>
             </action>
         </package>
     </xwork>

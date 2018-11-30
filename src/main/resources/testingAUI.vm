@@ -7,6 +7,13 @@
         #requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
     </head>
     <body>
+        <div id="message01" class="aui-message aui-message-error" style="display:none">
+            <p class="title">
+                <strong>Error!</strong>
+            </p>
+            <p id="body"></p>
+        </div>
+
         <form class="aui" action="$req.contextPath/plugins/spacelist/create.action" method="POST">
             <div class="field-group">
                 <label for="txtSpaceName">$i18n.getText("plugin.lang.spaceName")<span class="aui-icon icon-required">required</span></label>
@@ -48,7 +55,24 @@
                     var temp = $("#txtSpaceName").val();
                     console.log(temp);
                     if (temp.length <= 0) {
-                        console.log("invalid");
+                        showError();
+                    } else {
+                        removeError();
+                    }
+
+                    function removeError() {
+                        if ($("#message01").hasClass("space-name-error")) {
+                            $("#message01").removeClass("space-name-error");
+                            $("#message01").slideUp(1000);
+                            $("#body").empty();
+                        }
+                    }
+                    
+                    function showError(){
+                        $("#body").empty();
+                        $("#message01").slideDown(1000);
+                        $("#message01").addClass("space-name-error");
+                        $("#body").append("Can phai nhap Space Name");
                     }
                 });
                 $("#txtSpaceKey").focusout(function () {
@@ -59,21 +83,33 @@
                         for (var i = 0; i < listKey.length; i++) {
                             if (temp.match($(listKey[i]).text())) {
                                 valid = false;
-                                console.log(valid);
+                                showError("trung space key");
                                 break;
                             }
                         }
                     } else {
                         valid = false;
-                        console.log("key invalid");
+                        showError("space key khong hop le, space key chi duoc [a-z][0-9]");
                     }
                     if (valid) {
-                        console.log("key valid");
+                        removeError();
                     }
-                });
-                var myFlag = AJS.flag({
-                    type: 'success',
-                    body: $i18n.getText("plugin.lang.successMessage"),
+                    
+                    function removeError() {
+                        if ($("#message01").hasClass("space-key-error")) {
+                            $("#message01").removeClass("space-key-error");
+                            $("#message01").slideUp(1000);
+                            $("#body").empty();
+                        }
+                    }
+                    
+                    function showError(message){
+                        $("#body").empty();
+                        $("#message01").slideDown(1000);
+                        $("#message01").addClass("space-key-error");
+                        $("#body").append(message);
+                    }
+                    
                 });
             });
         </script>
