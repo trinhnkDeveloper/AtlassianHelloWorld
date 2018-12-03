@@ -24,7 +24,7 @@
                 <input class="text" type="text" id="txtSpaceKey" name="txtSpaceKey" required="true"><br>
             </div>
             <div class="field-group">
-                <button class="aui-button" id="addBtn">$i18n.getText("plugin.lang.add")</button><button class="aui-button">Cancel</button>
+                <button class="aui-button" id="addBtn">$i18n.getText("plugin.lang.add")</button>
             </div>
         </form>
         <table class="aui">
