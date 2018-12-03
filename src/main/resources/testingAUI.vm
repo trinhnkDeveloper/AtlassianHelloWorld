@@ -24,7 +24,7 @@
                 <input class="text" type="text" id="txtSpaceKey" name="txtSpaceKey" required="true"><br>
             </div>
             <div class="field-group">
-                <button class="aui-button">$i18n.getText("plugin.lang.add")</button><button class="aui-button">Cancel</button>
+                <button class="aui-button" id="addBtn">$i18n.getText("plugin.lang.add")</button><button class="aui-button">Cancel</button>
             </div>
         </form>
         <table class="aui">
@@ -49,71 +49,5 @@
                 #end
             </tbody>
         </table>
-        <script>
-            $(document).ready(function () {
-                $("#txtSpaceName").focusout(function () {
-                    var temp = $("#txtSpaceName").val();
-                    console.log(temp);
-                    if (temp.length <= 0) {
-                        showError();
-                    } else {
-                        removeError();
-                    }
-
-                    function removeError() {
-                        if ($("#message01").hasClass("space-name-error")) {
-                            $("#message01").removeClass("space-name-error");
-                            $("#message01").slideUp(1000);
-                            $("#body").empty();
-                        }
-                    }
-                    
-                    function showError(){
-                        $("#body").empty();
-                        $("#message01").slideDown(1000);
-                        $("#message01").addClass("space-name-error");
-                        $("#body").append("Can phai nhap Space Name");
-                        $("#txtSpaceName").focus();
-                    }
-                });
-                $("#txtSpaceKey").focusout(function () {
-                    var temp = $("#txtSpaceKey").val();
-                    var valid = true;
-                    if (temp.match(/^[a-zA-Z0-9]+$/) && temp.length <= 255) {
-                        var listKey = $(".spaceKey");
-                        for (var i = 0; i < listKey.length; i++) {
-                            if (temp.match($(listKey[i]).text())) {
-                                valid = false;
-                                showError("trung space key");
-                                break;
-                            }
-                        }
-                    } else {
-                        valid = false;
-                        showError("space key khong hop le, space key chi duoc [a-z][0-9]");
-                    }
-                    if (valid) {
-                        removeError();
-                    }
-                    
-                    function removeError() {
-                        if ($("#message01").hasClass("space-key-error")) {
-                            $("#message01").removeClass("space-key-error");
-                            $("#message01").slideUp(1000);
-                            $("#body").empty();
-                        }
-                    }
-                    
-                    function showError(message){
-                        $("#body").empty();
-                        $("#message01").slideDown(1000);
-                        $("#message01").addClass("space-key-error");
-                        $("#body").append(message);
-                        $("#txtSpaceKey").focus();
-                    }
-                    
-                });
-            });
-        </script>
     </body>
 </html>
