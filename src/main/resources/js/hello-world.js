@@ -86,4 +86,3 @@ $(document).ready(function () {
         $("#body").append(message);
         $("#addBtn").attr("disabled", "disabled");
     }
-});

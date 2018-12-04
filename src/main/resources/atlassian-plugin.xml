@@ -8,9 +8,9 @@
     </plugin-info>
 
     <!-- add our i18n resource -->
-    <resource type="i18n" name="hello-world" location="/resources/hello-world"/>
-    <resource type="i18n" name="hello-world_de_DE" location="/resources/hello-world_de_DE"/>
-    <resource type="i18n" name="hello-world_en_GB" location="/resources/hello-world_en_GB"/>
+    <resource type="i18n" name="hell-world" location="/resources/helloworld"/>
+    <resource type="i18n" name="helloworld_de_DE" location="/resources/helloworld_de_DE"/>
+    <resource type="i18n" name="helloworld_en_GB" location="/resources/helloworld_en_GB"/>
 
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
@@ -20,6 +20,76 @@
         <dependency>com.atlassian.auiplugin:aui-button</dependency>
         <dependency>com.atlassian.auiplugin:aui-message</dependency>
         <dependency>com.atlassian.auiplugin:aui-flag</dependency>
+        <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
+        <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>hello-world</context>
+    </web-resource>
+    
+    <web-item name="hello-action" key="hello-action-label" section="system.content.action/primary" weight="10">
+        <label key="hello.menu.label"/>
+        <link linkId="hello-action">/plugins/helloWorld/hello.action</link>
+    </web-item>
+    
+    <web-item name="questionaire" key="questionaire-label" section="system.content.action/primary" weight="10">
+        <label key="questionaire.menu.label"/>
+        <link linkId="questionaire">/plugins/questionaire/input.action</link>
+    </web-item>
+    
+    <xwork name="hello-world" key="hello-world">
+        <description>Hello World Page</description>
+        <package name="hello-world" extends="default" namespace="/plugins/helloWorld">
+            <action name="hello" class="jp.co.kodnet.plugins.sample.HelloWorld">
+                <result name="success" type="velocity">/view/hello_world.vm</result> 
+            </action>
+        </package>
+    </xwork>
+    <xwork name="questionaire" key="questionaire">
+        <package name="questionaire" extends="default" namespace="/plugins/questionaire">
+            <action name="input" class="jp.co.kodnet.plugins.sample.questionaire.InputAction">
+                <result name="success" type="velocity">/view/input.vm</result>
+            </action>
+            <action name="output" class="jp.co.kodnet.plugins.sample.questionaire.OutputAction">
+                <result name="success" type="velocity">/view/output.vm</result>
+                <result name="error" type="velocity">/view/error.vm</result>
+            </action>
+        </package>
+    </xwork>
+    <xwork name="spacelist" key="spacelist">
+        <package name="spacelist" extends="default" namespace="/plugins/spacelist">
+            <action name="view" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
+                <result name="success" type="velocity">/testingAUI.vm</result>
+                <result name="error" type="velocity">/view/hello_world.vm</result>
+            </action>
+            <action name="create" class="jp.co.kodnet.plugins.sample.allspace.CreateSpace">
+                <result name="success" type="redirect">/plugins/spacelist/view.action?status=success</result>
+            </action>
+        </package>
+    </xwork>
+=======
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="helloworld" location="/resources/helloworld"/>
+    <resource type="i18n" name="helloworld_en_GB" location="/resources/helloworld_en_GB"/>
+    <resource type="i18n" name="helloworld_de_DE" location="/resources/helloworld_de_DE"/>
+
+    <!-- add our web resources -->
+    <web-resource key="hello-world-resources" name="hello-world Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.auiplugin:aui-table</dependency>
+        <dependency>com.atlassian.auiplugin:aui-forms</dependency>
+        <dependency>com.atlassian.auiplugin:aui-button</dependency>
+        <dependency>com.atlassian.auiplugin:aui-message</dependency>
+        <dependency>com.atlassian.auiplugin:aui-flag </dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
