@@ -9,8 +9,8 @@
 
     <!-- add our i18n resource -->
     <resource type="i18n" name="hello-world" location="/resources/hello-world"/>
-    <resource type="i18n" name="hello-world" location="/resources/hello-world_de_DE"/>
-    <resource type="i18n" name="hello-world" location="/resources/hello-world_en_EN"/>
+    <resource type="i18n" name="hello-world_de_DE" location="/resources/hello-world_de_DE"/>
+    <resource type="i18n" name="hello-world_en_EN" location="/resources/hello-world_en_EN"/>
 
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
@@ -19,6 +19,7 @@
         <dependency>com.atlassian.auiplugin:aui-forms</dependency>
         <dependency>com.atlassian.auiplugin:aui-button</dependency>
         <dependency>com.atlassian.auiplugin:aui-message</dependency>
+        <dependency>com.atlassian.auiplugin:aui-flag</dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
