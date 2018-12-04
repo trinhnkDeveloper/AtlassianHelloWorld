@@ -10,7 +10,7 @@
     <!-- add our i18n resource -->
     <resource type="i18n" name="hello-world" location="/resources/hello-world"/>
     <resource type="i18n" name="hello-world_de_DE" location="/resources/hello-world_de_DE"/>
-    <resource type="i18n" name="hello-world_en_EN" location="/resources/hello-world_en_EN"/>
+    <resource type="i18n" name="hello-world_en_GB" location="/resources/hello-world_en_GB"/>
 
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
