@@ -90,12 +90,6 @@
                     <!-- https://developer.atlassian.com/docs/advanced-topics/configuration-of-instructions-in-atlassian-plugins -->
                     <instructions>
                         <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
-
-                        <!-- Add package to export here -->
-                        <Export-Package>
-                            jp.co.kodnet.plugins.sample.api,
-                        </Export-Package>
-
                         <!-- Add package import here -->
                         <Import-Package>
                             org.springframework.osgi.*;resolution:="optional",

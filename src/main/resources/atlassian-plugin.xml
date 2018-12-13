@@ -20,6 +20,7 @@
         <dependency>com.atlassian.auiplugin:aui-button</dependency>
         <dependency>com.atlassian.auiplugin:aui-message</dependency>
         <dependency>com.atlassian.auiplugin:aui-flag</dependency>
+        <dependency>com.atlassian.auiplugin:aui-dropdown2</dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
@@ -59,11 +60,14 @@
     <xwork name="spacelist" key="spacelist">
         <package name="spacelist" extends="default" namespace="/plugins/spacelist">
             <action name="view" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
-                <result name="success" type="velocity">/testingAUI.vm</result>
+                <result name="success" type="velocity">/view/spacelist.vm</result>
                 <result name="error" type="velocity">/view/hello_world.vm</result>
             </action>
             <action name="create" class="jp.co.kodnet.plugins.sample.allspace.CreateSpace">
                 <result name="success" type="redirect">/plugins/spacelist/view.action?status=success</result>
+            </action>
+            <action name="attachment" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
+                <result name="success" type="json">/view/spacelist.vm</result>
             </action>
         </package>
     </xwork>

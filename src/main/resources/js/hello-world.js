@@ -86,3 +86,22 @@ $(document).ready(function () {
         $("#body").append(message);
         $("#addBtn").attr("disabled", "disabled");
     }
+    
+    // function go on
+    popupAttachment();
+});
+/*
+ *  FUNCTION 
+ * 
+ */
+var selectPage;
+function popupAttachment(){
+    selectPage = $("#sync-product-single-select");
+    var pagekey;
+    selectPage.change(function(){
+        pagekey = selectPage.val();
+        $.getJSON("attachment.action",{"pagekey" : pagekey, "option": "2"}, function(data){
+           console.log(data);
+        });
+    });
+}

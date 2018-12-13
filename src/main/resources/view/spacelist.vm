@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>AUI</title>
+        <title>$i18n.getText("plugin.lang.vmTitle")</title>
         <meta charset="UTF-8">
         <meta name="decorator" content="atl.general">
         #requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
@@ -40,7 +40,11 @@
             <tbody>
                 #foreach($value in $spaceManager.getAllSpaces())
                 <tr>
-                    <td>$value.getName()</td>
+                    <td>
+                        <a href="$req.contextPath/plugins/spacelist/view.action?option=1&spacekey=$value.getKey()">
+                            $value.getName()
+                        </a>
+                    </td>
                     <td>$value.getHomePage()</td>
                     <td>$value.getDescription()</td>
                     <td>$value.getDisplayTitle()</td>
@@ -49,5 +53,17 @@
                 #end
             </tbody>
         </table>
+        #if($action.action == "pages")
+        <form class="aui">
+            <label for="sync-product-single-select">$i18n.getText("plugin.lang.choosePage"):</label>
+            <p>
+                <select id="sync-product-single-select" name="product" placeholder="Select a product">
+                    #foreach($value in $action.pages)
+                    <option value="$value.getId()">$value.getDisplayTitle()<option>
+                    #end
+                </select>
+            </p>
+        </form>
+        #end
     </body>
 </html>
