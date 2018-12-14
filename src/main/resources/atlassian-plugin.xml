@@ -9,12 +9,11 @@
 
     <!-- add our i18n resource -->
     <resource type="i18n" name="hellworld" location="/resources/helloworld"/>
-    <resource type="i18n" name="helloworld_de_DE" location="/resources/helloworld_de_DE"/>
-    <resource type="i18n" name="helloworld_en_GB" location="/resources/helloworld_en_GB"/>
 
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.auiplugin:aui-dialog2</dependency>
         <dependency>com.atlassian.auiplugin:aui-table</dependency>
         <dependency>com.atlassian.auiplugin:aui-forms</dependency>
         <dependency>com.atlassian.auiplugin:aui-button</dependency>
@@ -36,6 +35,11 @@
     <web-item name="questionaire" key="questionaire-label" section="system.content.action/primary" weight="10">
         <label key="questionaire.menu.label"/>
         <link linkId="questionaire">/plugins/questionaire/input.action</link>
+    </web-item>
+    
+    <web-item name="spacelist-label" key="spacelist-label" section="system.header/left" weight="60">
+        <label key="helloworld.lang.webitem.spacelist"/>
+        <link linkId="spacelist-action">/plugins/spacelist/view.action</link>
     </web-item>
     
     <xwork name="hello-world" key="hello-world">
@@ -65,6 +69,7 @@
             </action>
             <action name="create" class="jp.co.kodnet.plugins.sample.allspace.CreateSpace">
                 <result name="success" type="redirect">/plugins/spacelist/view.action?status=success</result>
+                <result name="error" type="redirect">/plugins/spacelist/view.action?status=error</result>
             </action>
             <action name="spacecontent" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
                 <result name="success" type="json">/view/spacelist.vm</result>
@@ -72,12 +77,4 @@
         </package>
     </xwork>
     
-    <ao key="ao-module">
-        <description>The module configuring the Active Objects service used by this plugin</description>
-        <entity>jp.co.kodnet.plugins.sample.allspace.Comments</entity>
-    </ao>
-    <servlet name="comments" class="jp.co.kodnet.plugins.sample.allspace.CommentsServlet">
-        <description>A servlet to add and list comments</description>
-        <url-pattern>/todo/list</url-pattern>
-    </servlet>
 </atlassian-plugin>

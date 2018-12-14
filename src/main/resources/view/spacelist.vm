@@ -1,69 +1,104 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>$i18n.getText("plugin.lang.vmTitle")</title>
+        <title>$i18n.getText("helloworld.lang.vmTitle")</title>
         <meta charset="UTF-8">
         <meta name="decorator" content="atl.general">
         #requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
+        #requireResource('com.atlassian.auiplugin:dialog2')
     </head>
     <body>
-        <div id="message01" class="aui-message aui-message-error" style="display:none">
-            <p class="title">
-                <strong>Error!</strong>
-            </p>
-            <p id="body"></p>
+        <div id="message01" class="aui-message aui-message-error" style="display: none">
+            <p class="title"><strong>Error!</strong></p>
+            <p id="body">$action.errorMessage</p>
         </div>
-
         <form class="aui" action="$req.contextPath/plugins/spacelist/create.action" method="POST">
             <div class="field-group">
-                <label for="txtSpaceName">$i18n.getText("plugin.lang.spaceName")<span class="aui-icon icon-required">required</span></label>
+                <label for="txtSpaceName">$i18n.getText("helloworld.lang.spaceName")<span class="aui-icon icon-required">required</span></label>
                 <input class="text" type="text" id="txtSpaceName" name="txtSpaceName" required="true"><br>
             </div>
             <div class="field-group">
-                <label for="txtSpaceKey">$i18n.getText("plugin.lang.spaceKey")<span class="aui-icon icon-required">required</span></label>
+                <label for="txtSpaceKey">$i18n.getText("helloworld.lang.spaceKey")<span class="aui-icon icon-required">required</span></label>
                 <input class="text" type="text" id="txtSpaceKey" name="txtSpaceKey" required="true"><br>
             </div>
             <div class="field-group">
-                <button class="aui-button" id="addBtn">$i18n.getText("plugin.lang.add")</button>
+                <button class="aui-button" id="addBtn">$i18n.getText("helloworld.lang.add")</button>
             </div>
         </form>
+
         <table class="aui" id="space-table">
             <thead>
                 <tr>
-                    <th>$i18n.getText("plugin.lang.spaceName")</th>
-                    <th>$i18n.getText("plugin.lang.homePage")</th>
-                    <th>$i18n.getText("plugin.lang.description")</th>
-                    <th>$i18n.getText("plugin.lang.displayTitle")</th>
-                    <th>$i18n.getText("plugin.lang.key")</th>
+                    <th></th>
+                    <th>$i18n.getText("helloworld.lang.spaceName")</th>
+                    <th>$i18n.getText("helloworld.lang.homePage")</th>
+                    <th>$i18n.getText("helloworld.lang.description")</th>
+                    <th>$i18n.getText("helloworld.lang.displayTitle")</th>
+                    <th>$i18n.getText("helloworld.lang.key")</th>
                 </tr>
             </thead>
             <tbody>
                 #foreach($value in $spaceManager.getAllSpaces())
                 <tr>
                     <td>
-                        <a href="$req.contextPath/plugins/spacelist/spacecontent.action?option=1&spacekey=$value.getKey()">
+                        <div class="radio">
+                            <input class="radio" type="radio" name="radiosbuton" value="$req.contextPath/plugins/spacelist/spacecontent.action?option=1&spacekey=$value.getKey()">
+                        </div>
+                    </td>
+                    <td>
+                        <a href="$req.contextPath/display/$value.getKey()">
                             $value.getName()
                         </a>
                     </td>
-                    <td>$value.getHomePage()</td>
-                    <td>$value.getDescription()</td>
+                    <td>$value.getHomePage().getTitle()</td>
+                    <td>$value.getDescription().getDisplayTitle()</td>
                     <td>$value.getDisplayTitle()</td>
                     <td class="spaceKey">$value.getKey()</td>
                 </tr>
                 #end
             </tbody>
         </table>
-        <div>
-            <form class="aui" id="pages" style="display: none;">
-                <label for="sync-product-single-select">Choose your product:</label>
-                <p>
-                    <select id="sync-product-single-select" name="product" placeholder="Select a product">
-                        <option></option>
-                    </select>
-                </p>
-            </form>
-        </div>
-        
-        <div id="table-container"></div>
+
+        <form class="aui" id="pages" style="display: none;">
+            <label for="sync-product-single-select">$i18n.getText('helloworld.lang.choosePage'):</label>
+            <p>
+                <select id="sync-product-single-select" class="select" name="product" placeholder="Select a product">
+                    <option></option>
+                </select>
+            </p>
+        </form>
+        <section role="dialog" id="demo-dialog" class="aui-layer aui-dialog2 aui-dialog2-medium" aria-hidden="true">
+            <header class="aui-dialog2-header">
+                <h1 class="aui-dialog2-header-main">Hello World</h1>
+                <div class="aui-dialog2-header-actions">
+                    <button id="demo-header-action" class="aui-button">Header Action</button>
+                </div>
+                <div class="aui-dialog2-header-secondary">
+                    <input id="demo-search" type="text" name="search">
+                </div>
+                <a class="aui-dialog2-header-close">
+                    <span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
+                </a>
+            </header>
+            <div class="aui-dialog2-content">
+                <table class='aui'>
+                    <thead>
+                        <tr>
+                            <th>$i18n.getText('helloworld.lang.name')</th>
+                            <th>$i18n.getText('helloworld.lang.size')</th>
+                            <th>$i18n.getText('helloworld.lang.creator')</th>
+                            <th>$i18n.getText('helloworld.lang.creationDate')</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attachment-table-body"></tbody>
+                </table>
+            </div>
+            <footer class="aui-dialog2-footer">
+                <div class="aui-dialog2-footer-actions">
+                    <button id="dialog-close-button" class="aui-button aui-button-link">Close</button>
+                </div>
+                <div class="aui-dialog2-footer-hint">this is a hint</div>
+            </footer>
+        </section>
     </body>
 </html>

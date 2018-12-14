@@ -1,21 +1,28 @@
 $(document).ready(function () {
-    
-    //success created new space
-    var getUrlParameter = function getUrlParameter(sParam) {
-        var sPageURL = window.location.search.substring(1),
-                sURLVariables = sPageURL.split('&'),
-                sParameterName,
-                i;
+    showAllPages();
+    successCreateSpace("status");
+    showDialogAttachment();
+});
+/*
+ *  FUNCTION 
+ * 
+ */
+function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
 
-        for (i = 0; i < sURLVariables.length; i++) {
-            sParameterName = sURLVariables[i].split('=');
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
 
-            if (sParameterName[0] === sParam) {
-                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-            }
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
         }
-    };
+    }
+}
 
+function successCreateSpace(sParam) {
     var status = getUrlParameter("status");
     console.log(status);
 
@@ -25,151 +32,86 @@ $(document).ready(function () {
             title: 'New Space',
             body: "New Space has been created."
         });
-    }else if(status == "error"){
-        require('aui/flag')({
-            type: "error",
-            title: "Error",
-            body: "Cannot create new space."
-        });
+    } else if (status == "error") {
+        $("#message01").show();
     }
-    //=====================end of method=======================
-    
-    
-    //Check input space name
-    $("#txtSpaceName").focusout(function () {
-        var temp = $("#txtSpaceName").val();
-        console.log(temp);
-        if (temp.length <= 0) {
-            showError("space-name-error", "Space name is empty");
-        } else {
-            removeError("space-name-error");
-        }
-    });
-
-    //check input space key
-    $("#txtSpaceKey").focusout(function () {
-        var temp = $("#txtSpaceKey").val();
-        var valid = true;
-        if (temp.match(/^[a-zA-Z0-9]+$/) && temp.length <= 255) {
-            var listKey = $(".spaceKey");
-            for (var i = 0; i < listKey.length; i++) {
-                if (temp.match($(listKey[i]).text())) {
-                    valid = false;
-                    showError("space-key-error", "Dulicate Space Key");
-                    break;
-                }
-            }
-        } else {
-            valid = false;
-            showError("space-key-error", "space key khong hop le, space key chi duoc [a-z][0-9]");
-        }
-        if (valid) {
-            removeError("space-key-error");
-        }
-    });
-
-    //remove error notice
-    function removeError(spaceErrorClass) {
-        if ($("#message01").hasClass(spaceErrorClass)) {
-            $("#message01").removeClass(spaceErrorClass);
-            $("#message01").slideUp(1000);
-            $("#body").empty();
-            $("#addBtn").removeAttr("disabled");
-        }
-    }
-
-    //show message error
-    function showError(spaceErrorClass, message) {
-        $("#body").empty();
-        $("#message01").slideDown(1000);
-        $("#message01").addClass(spaceErrorClass);
-        $("#body").append(message);
-        $("#addBtn").attr("disabled", "disabled");
-    }
-    
-    // function go on
-    showAllPages();
-    popupAttachment();
-});
-/*
- *  FUNCTION 
- * 
- */
-
+}
 
 /*
  *  Show pages (currently under construction)
  */
-function showAllPages(){
-    $("#space-table").click(function(e){
-        e.preventDefault();
+function showAllPages() {
+    $(":radio").click(function (e) {
+        $('#sync-product-single-select').empty();
         var a = $(e.target);
-        $.getJSON(a.attr("href"), function(data){
+        $.getJSON(a.attr("value"), function (data) {
+            console.log(data);
             createComboBox(data);
         });
     });
 }
 
-function createComboBox(data){
-        $.each(data, function(index, object){
-           for(var key in object){
-               var option = document.createElement('option');
-               option.setAttribute("value", key);
-               var optionText = document.createTextNode(object[key]);
-               option.appendChild(optionText);
-               $('#sync-product-single-select').append(option);
-           }
-        });
-        //show 
-        $("#pages").css("display", "block");
+function createComboBox(data) {
+    $.each(data, function (index, object) {
+        for (var key in object) {
+            var option = document.createElement('option');
+            option.setAttribute("value", key);
+            var optionText = document.createTextNode(object[key]);
+            option.appendChild(optionText);
+            $('#sync-product-single-select').append(option);
+        }
+    });
+    //show 
+    $("#pages").css("display", "block");
 }
 /*
  * Pop up attachment
  * 
  */
-
-var selectPage;
-function popupAttachment(){
-    selectPage = $("#sync-product-single-select");
-    selectPage.change(function(){
-        var pageid = selectPage.val();
-        console.log(pageid);
-        var table_container = $("#table-container");
-        table_container.empty();
-        $.getJSON("spacecontent.action",{"pageid" : pageid, "option": "2"}, function(data){
-          createTable(data); 
-        });
+function showDialogAttachment() {
+    // Shows the dialog when the "Show dialog" select is changed
+    AJS.$("#sync-product-single-select").change(function () {
+        var pageId = $("#sync-product-single-select").val();
+        popupAttachment(pageId);
+        AJS.dialog2("#demo-dialog").show();
     });
 }
 
-function createTable(data){
-    var table = document.createElement('table');
-    table.setAttribute("class", "aui");
-    var thead = document.createElement('thead');
-    var tbody = document.createElement('tbody');
-    table.appendChild(thead);
-    table.appendChild(tbody);
-    // add title for each column
-    var headRow = document.createElement('tr');
-    thead.appendChild(headRow);
-    for(var key in data[0]){
-        console.log("column title");
-        var tdata = document.createElement('th');
-        var text = document.createTextNode(key);
-        tdata.appendChild(text);
-        headRow.appendChild(tdata);
-    }
-    $.each(data, function(index, _attachment){
-        var bodyRow = document.createElement('tr');
-        tbody.appendChild(bodyRow);
-        $.each(_attachment, function(i, value){
-            var rowData = document.createElement('td');           
-            var dataValue = document.createTextNode(value);
-            rowData.appendChild(dataValue);
-            bodyRow.appendChild(rowData);
-        });
+function popupAttachment(pageid) {
+    $.getJSON("spacecontent.action", {"pageid": pageid, "option": "2"}, function (data) {
+        createTable(data);
     });
-    
-    // show table
-    $('#table-container').append(table);
+}
+
+function createTable(data) {
+    $.each(data, function (index, object) {
+        var bodyRow = document.createElement("tr");
+        var datName = document.createElement("td");
+        var link = document.createElement("a");
+        link.setAttribute("href", AJS.contextPath() + object.downloadPath);
+        link.setAttribute("download", object.name);
+        var textName = document.createTextNode(object.name);
+        datName.appendChild(link);
+        link.appendChild(textName);
+
+        var datSize = document.createElement("td");
+        var textSize = document.createTextNode(object.size);
+        datSize.appendChild(textSize);
+
+        var datCreator = document.createElement("td");
+        var textCreator = document.createTextNode(object.creator);
+        datCreator.appendChild(textCreator);
+
+        var datDate = document.createElement('td');
+        var textDate = document.createTextNode(object.creationDate);
+        datDate.appendChild(textDate);
+
+        bodyRow.appendChild(datName);
+        bodyRow.appendChild(datSize);
+        bodyRow.appendChild(datCreator);
+        bodyRow.appendChild(datDate);
+        console.log(bodyRow);
+        $('#attachment-table-body').append(bodyRow);
+    });
+
 }

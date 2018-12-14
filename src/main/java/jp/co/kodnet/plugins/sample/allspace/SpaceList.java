@@ -27,6 +27,11 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
     private PageManager pageManager = (PageManager) ContainerManager.getComponent("pageManager");
     private String action;
     private List<Map<String, String>> jsonResult;
+    private String errorMessage = "invalid space key";
+    
+    public String getErrorMessage(){
+        return errorMessage;
+    }
 
     @Override
     public String execute() throws Exception {
@@ -114,10 +119,15 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
         List<Attachment> attachmentList = page.getAttachments();
         for (Attachment temp : attachmentList) {
             Map<String, String> attachment = new LinkedHashMap<>();
-            attachment.put("Name", temp.getDisplayTitle());
-            attachment.put("Size", String.valueOf(temp.getFileSize()));
-            attachment.put("Creator", temp.getCreatorName());
-            attachment.put("Creation Date", String.valueOf(temp.getCreationDate()));
+            attachment.put("name", temp.getDisplayTitle());
+            attachment.put("size", String.valueOf(temp.getFileSize()));
+            if(temp.getCreatorName() == null){
+                attachment.put("creator", "empty");
+            }else{
+                attachment.put("creator", temp.getCreatorName());
+            }
+            attachment.put("creationDate", String.valueOf(temp.getCreationDate()));
+            attachment.put("downloadPath", temp.getDownloadPath());
             jsonResult.add(attachment);
         }
     }

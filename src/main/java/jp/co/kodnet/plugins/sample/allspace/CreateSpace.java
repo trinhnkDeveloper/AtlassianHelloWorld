@@ -1,11 +1,14 @@
 package jp.co.kodnet.plugins.sample.allspace;
 
 import com.atlassian.confluence.core.ConfluenceActionSupport;
+import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
+import com.atlassian.confluence.spaces.SpaceStatus;
 import com.atlassian.spring.container.ContainerManager;
 import com.atlassian.user.User;
 import com.atlassian.user.UserManager;
 import com.opensymphony.xwork.ActionContext;
+import java.util.List;
 
 /**
  *
@@ -15,9 +18,18 @@ public class CreateSpace extends ConfluenceActionSupport {
 
     private SpaceManager spaceManager = (SpaceManager) ContainerManager.getComponent("spaceManager");
     private UserManager userManager;
+    private String errorMessage;
 
     public SpaceManager getSpaceManager() {
         return spaceManager;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public UserManager getUserManager() {
+        return userManager;
     }
 
     private String getParameter(ActionContext context, String key) {
@@ -35,17 +47,19 @@ public class CreateSpace extends ConfluenceActionSupport {
         ActionContext context = ActionContext.getContext();
         String spaceName = getParameter(context, "txtSpaceName");
         String spaceKey = getParameter(context, "txtSpaceKey");
-
-          User user = getAuthenticatedUser();
-        if (user != null) {
-            spaceManager.createSpace(spaceKey, spaceName, "new Space", user);
-        } else {
-            return ERROR;
+        if (Space.isValidSpaceKey(spaceKey)) {
+            List<String> spaceKeys = (List<String>) spaceManager.getAllSpaceKeys(SpaceStatus.CURRENT);
+            for (String temp : spaceKeys) {
+                if (temp.equalsIgnoreCase(spaceKey)) {
+                    errorMessage = "Duplicate Space Key";
+                    return ERROR;
+                }
+            }
+            User user = getAuthenticatedUser();
+            Space freshSpace = spaceManager.createSpace(spaceKey, spaceName, "", user);
+            return SUCCESS;
         }
-        return SUCCESS;
-    }
-
-    public UserManager getUserManager() {
-        return userManager;
+        errorMessage = "Invalid Space Key";
+        return ERROR;
     }
 }
