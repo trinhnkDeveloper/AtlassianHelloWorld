@@ -88,20 +88,88 @@ $(document).ready(function () {
     }
     
     // function go on
+    showAllPages();
     popupAttachment();
 });
 /*
  *  FUNCTION 
  * 
  */
+
+
+/*
+ *  Show pages (currently under construction)
+ */
+function showAllPages(){
+    $("#space-table").click(function(e){
+        e.preventDefault();
+        var a = $(e.target);
+        $.getJSON(a.attr("href"), function(data){
+            createComboBox(data);
+        });
+    });
+}
+
+function createComboBox(data){
+        $.each(data, function(index, object){
+           for(var key in object){
+               var option = document.createElement('option');
+               option.setAttribute("value", key);
+               var optionText = document.createTextNode(object[key]);
+               option.appendChild(optionText);
+               $('#sync-product-single-select').append(option);
+           }
+        });
+        //show 
+        $("#pages").css("display", "block");
+}
+/*
+ * Pop up attachment
+ * 
+ */
+
 var selectPage;
 function popupAttachment(){
     selectPage = $("#sync-product-single-select");
-    var pagekey;
     selectPage.change(function(){
-        pagekey = selectPage.val();
-        $.getJSON("attachment.action",{"pagekey" : pagekey, "option": "2"}, function(data){
-           console.log(data);
+        var pageid = selectPage.val();
+        console.log(pageid);
+        var table_container = $("#table-container");
+        table_container.empty();
+        $.getJSON("spacecontent.action",{"pageid" : pageid, "option": "2"}, function(data){
+          createTable(data); 
         });
     });
+}
+
+function createTable(data){
+    var table = document.createElement('table');
+    table.setAttribute("class", "aui");
+    var thead = document.createElement('thead');
+    var tbody = document.createElement('tbody');
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    // add title for each column
+    var headRow = document.createElement('tr');
+    thead.appendChild(headRow);
+    for(var key in data[0]){
+        console.log("column title");
+        var tdata = document.createElement('th');
+        var text = document.createTextNode(key);
+        tdata.appendChild(text);
+        headRow.appendChild(tdata);
+    }
+    $.each(data, function(index, _attachment){
+        var bodyRow = document.createElement('tr');
+        tbody.appendChild(bodyRow);
+        $.each(_attachment, function(i, value){
+            var rowData = document.createElement('td');           
+            var dataValue = document.createTextNode(value);
+            rowData.appendChild(dataValue);
+            bodyRow.appendChild(rowData);
+        });
+    });
+    
+    // show table
+    $('#table-container').append(table);
 }

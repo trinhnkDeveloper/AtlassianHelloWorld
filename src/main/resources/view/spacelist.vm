@@ -27,7 +27,7 @@
                 <button class="aui-button" id="addBtn">$i18n.getText("plugin.lang.add")</button>
             </div>
         </form>
-        <table class="aui">
+        <table class="aui" id="space-table">
             <thead>
                 <tr>
                     <th>$i18n.getText("plugin.lang.spaceName")</th>
@@ -41,7 +41,7 @@
                 #foreach($value in $spaceManager.getAllSpaces())
                 <tr>
                     <td>
-                        <a href="$req.contextPath/plugins/spacelist/view.action?option=1&spacekey=$value.getKey()">
+                        <a href="$req.contextPath/plugins/spacelist/spacecontent.action?option=1&spacekey=$value.getKey()">
                             $value.getName()
                         </a>
                     </td>
@@ -53,17 +53,17 @@
                 #end
             </tbody>
         </table>
-        #if($action.action == "pages")
-        <form class="aui">
-            <label for="sync-product-single-select">$i18n.getText("plugin.lang.choosePage"):</label>
-            <p>
-                <select id="sync-product-single-select" name="product" placeholder="Select a product">
-                    #foreach($value in $action.pages)
-                    <option value="$value.getId()">$value.getDisplayTitle()<option>
-                    #end
-                </select>
-            </p>
-        </form>
-        #end
+        <div>
+            <form class="aui" id="pages" style="display: none;">
+                <label for="sync-product-single-select">Choose your product:</label>
+                <p>
+                    <select id="sync-product-single-select" name="product" placeholder="Select a product">
+                        <option></option>
+                    </select>
+                </p>
+            </form>
+        </div>
+        
+        <div id="table-container"></div>
     </body>
 </html>

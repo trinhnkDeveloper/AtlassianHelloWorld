@@ -10,7 +10,9 @@ import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.util.i18n.I18NBean;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork.ActionContext;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,19 +20,17 @@ import java.util.Map;
  *
  * @author trinhnk
  */
-public class SpaceList extends ConfluenceActionSupport implements Beanable{
+public class SpaceList extends ConfluenceActionSupport implements Beanable {
 
     private SpaceManager manager = (SpaceManager) ContainerManager.getComponent("spaceManager");
     private I18NBean i18nBean;
     private PageManager pageManager = (PageManager) ContainerManager.getComponent("pageManager");
     private String action;
-    private List<Page> pages;
-    private Map<String, Map> attachments;
-    
+    private List<Map<String, String>> jsonResult;
+
     @Override
     public String execute() throws Exception {
         ActionContext context = ActionContext.getContext();
-        System.out.println("API js");
         checkOptions(context);
         if (manager == null) {
             return ERROR;
@@ -51,66 +51,74 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable{
     public SpaceManager getManager() {
         return manager;
     }
-    
-    public PageManager getPageManager(){
+
+    public PageManager getPageManager() {
         return pageManager;
     }
-    
+
     public String getAction() {
         return action;
     }
 
-    public List<Page> getPages() {
-        return pages;
+    @Override
+    public Object getBean() {
+        return jsonResult;
     }
-    
-    public String getParameter(ActionContext context, String key){
+
+    public String getParameter(ActionContext context, String key) {
         Object obj = context.getParameters().get(key);
-        if(obj instanceof String[] && ((String[]) obj).length != 0){
+        if (obj instanceof String[] && ((String[]) obj).length != 0) {
             return ((String[]) obj)[0];
-        }else if(obj instanceof String){
+        } else if (obj instanceof String) {
             return (String) obj;
         }
         return null;
     }
-    
-    
-    public void checkOptions(ActionContext context){
+
+    public void checkOptions(ActionContext context) {
         String option = getParameter(context, "option");
-        if(option == null){
+        if (option == null) {
             return;
         }
-        switch(option){
+        switch (option) {
             case "1":
-                String spaceKey = getParameter(context, "spacekey");
-                Space space = manager.getSpace(spaceKey);
-                pages = pageManager.getPages(space, true);
-                action = "pages";
+                handleOption1(context);
                 break;
             case "2":
-                System.out.println("option 2");
-                int i = 1;
-                String pageKey = getParameter(context, "pagekey");
-                System.out.println(pageKey);
-                Page page = pageManager.getPage(Long.parseLong(pageKey));
-                List<Attachment> attachList = page.getAttachments();
-                for(Attachment a : attachList){
-                    System.out.println("attach");
-                    Map<String, String> attachment = new HashMap<>();
-                    attachment.put("name", a.getDisplayTitle());
-                    attachment.put("size", String.valueOf(a.getFileSize()));
-                    attachment.put("creator", a.getCreator().getName());
-                    attachment.put("creationdate", String.valueOf(a.getCreationDate()));
-                    attachment.put("label", String.valueOf(a.getLabelCount()));
-                    attachments.put("attachment" + i++, attachment);
-                }
+                handleOption2(context);
                 break;
             default:
         }
     }
 
-    @Override
-    public Object getBean() {
-        return attachments;
+    public void handleOption1(ActionContext context) {
+        jsonResult = new ArrayList<>();
+        System.out.println("i am here");
+        String spaceKey = getParameter(context, "spacekey");
+        Space space = manager.getSpace(spaceKey);
+        List<Page> pages = pageManager.getPages(space, true);
+        Map<String, String> pagesMap = new HashMap<>();
+        for(Page temp : pages){
+            System.out.println("hey");
+            pagesMap.put(String.valueOf(temp.getId()), temp.getDisplayTitle());
+            System.out.println("id: " + String.valueOf(temp.getId()) + " - title: " + temp.getDisplayTitle());
+        }
+        jsonResult.add(pagesMap);
+        action = "pages";
+    }
+
+    public void handleOption2(ActionContext context) {
+        jsonResult = new ArrayList<>();
+        String pageId = getParameter(context, "pageid");
+        Page page = pageManager.getPage(Long.parseLong(pageId));
+        List<Attachment> attachmentList = page.getAttachments();
+        for (Attachment temp : attachmentList) {
+            Map<String, String> attachment = new LinkedHashMap<>();
+            attachment.put("Name", temp.getDisplayTitle());
+            attachment.put("Size", String.valueOf(temp.getFileSize()));
+            attachment.put("Creator", temp.getCreatorName());
+            attachment.put("Creation Date", String.valueOf(temp.getCreationDate()));
+            jsonResult.add(attachment);
+        }
     }
 }
