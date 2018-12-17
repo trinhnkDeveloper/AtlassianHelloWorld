@@ -4,6 +4,7 @@ import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.spaces.SpaceStatus;
+import com.atlassian.confluence.util.i18n.I18NBean;
 import com.atlassian.spring.container.ContainerManager;
 import com.atlassian.user.User;
 import com.atlassian.user.UserManager;
@@ -18,14 +19,18 @@ public class CreateSpace extends ConfluenceActionSupport {
 
     private SpaceManager spaceManager = (SpaceManager) ContainerManager.getComponent("spaceManager");
     private UserManager userManager;
-    private String errorMessage;
+    private I18NBean i18nBean;
+
+    public I18NBean getI18nBean() {
+        return i18nBean;
+    }
+
+    public void setI18nBean(I18NBean i18nBean) {
+        this.i18nBean = i18nBean;
+    }
 
     public SpaceManager getSpaceManager() {
         return spaceManager;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
     }
 
     public UserManager getUserManager() {
@@ -51,7 +56,7 @@ public class CreateSpace extends ConfluenceActionSupport {
             List<String> spaceKeys = (List<String>) spaceManager.getAllSpaceKeys(SpaceStatus.CURRENT);
             for (String temp : spaceKeys) {
                 if (temp.equalsIgnoreCase(spaceKey)) {
-                    errorMessage = "Duplicate Space Key";
+                    SpaceList.setMessage("helloworld.lang.errorMessage.dulicate");
                     return ERROR;
                 }
             }
@@ -59,7 +64,7 @@ public class CreateSpace extends ConfluenceActionSupport {
             Space freshSpace = spaceManager.createSpace(spaceKey, spaceName, "", user);
             return SUCCESS;
         }
-        errorMessage = "Invalid Space Key";
+        SpaceList.setMessage("helloworld.lang.errorMessage.invalid");
         return ERROR;
     }
 }

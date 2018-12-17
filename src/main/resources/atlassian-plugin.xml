@@ -20,10 +20,13 @@
         <dependency>com.atlassian.auiplugin:aui-message</dependency>
         <dependency>com.atlassian.auiplugin:aui-flag</dependency>
         <dependency>com.atlassian.auiplugin:aui-select</dependency>
+        <dependency>com.atlassian.auiplugin:aui-experimental-iconfont</dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
         <resource type="download" name="images/" location="/images"/>
-
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
         <context>hello-world</context>
     </web-resource>
     
@@ -73,6 +76,9 @@
             </action>
             <action name="spacecontent" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
                 <result name="success" type="json">/view/spacelist.vm</result>
+            </action>
+            <action name="deletespace" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
+                <result name="success" type="redirect">/plugins/spacelist/view.action?status=deleted</result>
             </action>
         </package>
     </xwork>

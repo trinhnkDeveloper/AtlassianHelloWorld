@@ -1,3 +1,11 @@
+/**
+ * 
+ * GLOBAL VARIABLES
+ */
+var __SUCCESS = "success", __ERROR = "error", __DELETED = "deleted";
+/*
+ * RUN SCRIPT
+ */
 $(document).ready(function () {
     showAllPages();
     successCreateSpace("status");
@@ -26,14 +34,20 @@ function successCreateSpace(sParam) {
     var status = getUrlParameter("status");
     console.log(status);
 
-    if (status == "success") {
+    if (status == __SUCCESS) {
         require('aui/flag')({
             type: "success",
             title: 'New Space',
             body: "New Space has been created."
         });
-    } else if (status == "error") {
+    } else if (status == __ERROR) {
         $("#message01").show();
+    } else if( status == __DELETED){
+        require('aui/flag')({
+            type: "success",
+            title: 'New Space',
+            body: "Your Space has been deleted."
+        });
     }
 }
 
@@ -42,10 +56,11 @@ function successCreateSpace(sParam) {
  */
 function showAllPages() {
     $(":radio").click(function (e) {
-        $('#sync-product-single-select').empty();
-        var a = $(e.target);
-        $.getJSON(a.attr("value"), function (data) {
-            console.log(data);
+        $('#page-select').empty();
+        var page = $(e.target);
+        //var spaceName = page.attr("name");
+        $.getJSON(page.attr("value"), function (data) {
+            $("#combobox-label").text( AJS.I18n.getText('helloworld.lang.choosePage') + ":");
             createComboBox(data);
         });
     });
@@ -56,24 +71,28 @@ function createComboBox(data) {
         for (var key in object) {
             var option = document.createElement('option');
             option.setAttribute("value", key);
+            option.setAttribute("name", object[key]);
             var optionText = document.createTextNode(object[key]);
             option.appendChild(optionText);
-            $('#sync-product-single-select').append(option);
+            $('#page-select').append(option);
         }
     });
-    //show 
+    //show combobox
     $("#pages").css("display", "block");
-}
+}   
 /*
  * Pop up attachment
  * 
  */
 function showDialogAttachment() {
     // Shows the dialog when the "Show dialog" select is changed
-    AJS.$("#sync-product-single-select").change(function () {
-        var pageId = $("#sync-product-single-select").val();
+    AJS.$("#page-select").change(function () {
+        var pageId = $("#page-select option:selected").val();
+        var pageName = $("#page-select option:selected").text();
+        console.log(pageName);
+        $("#dialog-header").text(pageName);
         popupAttachment(pageId);
-        AJS.dialog2("#demo-dialog").show();
+        AJS.dialog2("#attachment-dialog").show();
     });
 }
 
@@ -113,5 +132,4 @@ function createTable(data) {
         console.log(bodyRow);
         $('#attachment-table-body').append(bodyRow);
     });
-
 }

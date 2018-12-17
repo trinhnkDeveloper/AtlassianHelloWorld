@@ -1,0 +1,51 @@
+#space-table, #attachments-table{
+    table-layout: fixed;
+}
+#space-table tbody, #attachments-table tbody{
+   display: block;
+   height: 200px;
+  width: 100%;
+   overflow: auto;
+}
+#space-table thead, #attachments-table thead{
+ display: block;   
+}
+#space-table tr{
+}
+
+#space-table th, #space-table td{
+   width: 25%;
+   overflow: hidden;
+}
+
+#space-table tbody::-webkit-scrollbar{
+   display: none;
+}
+#space-table .radio-container, #space-table .radio-header{
+    width: 21px;
+}
+#space-table .radio-header{
+    width: 21px;
+    visibility: hidden;
+}
+
+#attachments-table th, #attachments-table td{
+   width: 30%;
+   overflow: hidden;
+}
+#attachments-table tbody::-webkit-scrollbar{
+    display: none;
+}
+.delete-btn{
+    color: #B22222;
+    cursor: pointer;
+}
+.delete-btn:hover{
+    color: red;
+}
+.delete-btn-header{
+    visibility: hidden;
+}
+.radio{
+   cursor: pointer;
+}

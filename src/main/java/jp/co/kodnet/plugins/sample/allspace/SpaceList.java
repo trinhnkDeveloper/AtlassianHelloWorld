@@ -27,19 +27,23 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
     private PageManager pageManager = (PageManager) ContainerManager.getComponent("pageManager");
     private String action;
     private List<Map<String, String>> jsonResult;
-    private String errorMessage = "invalid space key";
+    private static String message;
     
-    public String getErrorMessage(){
-        return errorMessage;
+    public static String getMessage(){
+        return message;
+    }
+    
+    public static void setMessage(String message){
+        SpaceList.message = message;
     }
 
     @Override
     public String execute() throws Exception {
         ActionContext context = ActionContext.getContext();
-        checkOptions(context);
         if (manager == null) {
             return ERROR;
         }
+        checkOptions(context);
         return SUCCESS;
     }
 
@@ -92,6 +96,9 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
             case "2":
                 handleOption2(context);
                 break;
+            case "3":
+                handleOption3(context);
+                break;
             default:
         }
     }
@@ -122,7 +129,7 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
             attachment.put("name", temp.getDisplayTitle());
             attachment.put("size", String.valueOf(temp.getFileSize()));
             if(temp.getCreatorName() == null){
-                attachment.put("creator", "empty");
+                attachment.put("creator", "");
             }else{
                 attachment.put("creator", temp.getCreatorName());
             }
@@ -130,5 +137,12 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
             attachment.put("downloadPath", temp.getDownloadPath());
             jsonResult.add(attachment);
         }
+    }
+    
+    public void handleOption3(ActionContext context){
+        String spaceKey = getParameter(context, "spacekey");
+        Space delSpace = manager.getSpace(spaceKey);
+        String spaceName = delSpace.getDisplayTitle();
+        manager.removeSpace(delSpace);
     }
 }
