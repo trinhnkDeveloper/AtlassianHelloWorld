@@ -69,6 +69,8 @@ function showAllPages() {
 function createComboBox(data) {
     $.each(data, function (index, object) {
         for (var key in object) {
+            var temp = document.createElement('option');
+            $('#page-select').append(temp);
             var option = document.createElement('option');
             option.setAttribute("value", key);
             option.setAttribute("name", object[key]);

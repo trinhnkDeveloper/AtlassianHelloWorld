@@ -83,4 +83,10 @@
         </package>
     </xwork>
     
+    <ao key="ao-module">
+        <entity>jp.co.kodnet.plugins.sample.todo.Todo</entity>
+    </ao>
+    <servlet name="TodoServlet" class="jp.co.kodnet.plugins.sample.todo.TodoServlet" key="todo-list">
+        <url-pattern>/todo/list</url-pattern>
+    </servlet>
 </atlassian-plugin>

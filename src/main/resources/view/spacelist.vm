@@ -30,29 +30,31 @@
             <thead>
                 <tr>
                     <th class="radio-header"><input type="radio" disabled="true"></th>
+                    <th>$i18n.getText("helloworld.lang.key")</th>
                     <th>$i18n.getText("helloworld.lang.spaceName")</th>
                     <th>$i18n.getText("helloworld.lang.homePage")</th>
                     <th>$i18n.getText("helloworld.lang.description")</th>
                     <th>$i18n.getText("helloworld.lang.displayTitle")</th>
-                    <th>$i18n.getText("helloworld.lang.key")</th>
+                    
                     <th><span class="aui-icon aui-icon-small aui-iconfont-close-dialog delete-btn-header"></span></th>
                 </tr>
             </thead>
             <tbody>
                 #foreach($value in $spaceManager.getAllSpaces())
                 <tr>
+                    
                     <td class="radio-container">
                         <input class="radio" type="radio" name="radiobutton" value="$req.contextPath/plugins/spacelist/spacecontent.action?option=1&spacekey=$value.getKey()">
                     </td>
+                    <td>$value.getKey()</td>
                     <td>
-                        <a href="$req.contextPath/display/$value.getKey()">
+                        <a href="$req.contextPath/display/$value.getKey()" target="_blank">
                             $value.getName()
                         </a>
                     </td>
                     <td>$value.getHomePage().getTitle()</td>
                     <td>$value.getDescription().getDisplayTitle()</td>
                     <td>$value.getDisplayTitle()</td>
-                    <td>$value.getKey()</td>
                     <td>
                         <a href="$req.contextPath/plugins/spacelist/deletespace.action?option=3&spacekey=$value.getKey()">
                             <span class="aui-icon aui-icon-small aui-iconfont-close-dialog delete-btn"></span>
@@ -67,7 +69,6 @@
             <label id="combobox-label" for="page-select"></label>
             <p>
                 <select id="page-select" class="select">
-                    <option></option>
                 </select>
             </p>
         </form>
