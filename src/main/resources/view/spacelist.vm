@@ -91,7 +91,9 @@
                 </table>
             </div>
             <footer class="aui-dialog2-footer">
-                <button id="attachments-close-button" class="aui-button">$i18n.getText('helloworld.lang.confirm.cancel')</button>
+                <div class="aui-dialog2-footer-actions">
+                    <button id="attachments-close-button" class="aui-button">$i18n.getText('helloworld.lang.confirm.cancel')</button>
+                </div>
             </footer>
         </section>
         <!-- confirm delete dialog -->
