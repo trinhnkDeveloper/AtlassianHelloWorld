@@ -2,25 +2,31 @@
     table-layout: fixed;
 }
 #space-table tbody, #attachments-table tbody{
-   display: block;
-   height: 200px;
-  width: 100%;
-   overflow: auto;
+    display: block;
+    height: 250px;
+    width: 100%;
+    overflow: auto;
 }
 #space-table thead, #attachments-table thead{
- display: block;   
-}
-#space-table tr{
+    display: block;   
 }
 
-#space-table th, #space-table td{
-   width: 25%;
-   overflow: hidden;
+.space-key{
+    width: 10%;
+}
+.space-name{
+    width: 20%;
+}
+.space-description{
+    width: 35%;
+}
+.space-home{
+    width: 20%;
+}
+.space-title{
+    width: 20%;
 }
 
-#space-table tbody::-webkit-scrollbar{
-   display: none;
-}
 #space-table .radio-container, #space-table .radio-header{
     width: 21px;
 }
@@ -29,13 +35,6 @@
     visibility: hidden;
 }
 
-#attachments-table th, #attachments-table td{
-   width: 30%;
-   overflow: hidden;
-}
-#attachments-table tbody::-webkit-scrollbar{
-    display: none;
-}
 .delete-btn{
     color: #B22222;
     cursor: pointer;
@@ -47,5 +46,21 @@
     visibility: hidden;
 }
 .radio{
-   cursor: pointer;
+    cursor: pointer;
+}
+.attachment-name{
+    width: 25%;
+}
+.attachment-creator{
+    width: 10%;
+}
+.attachment-creationDate{
+    width: 15%;
+}
+.attachment-size {
+    width: 5%
+}
+#confirm-delete-btn a{
+    color: white;
+    text-decoration: none;
 }

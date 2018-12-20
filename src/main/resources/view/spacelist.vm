@@ -8,6 +8,7 @@
         #requireResource('com.atlassian.auiplugin:dialog2')
     </head>
     <body>
+        <!-- Message -->
         <div id="message01" class="aui-message aui-message-error" style="display: none">
             <p class="title"><strong>Error!</strong></p>
             <p id="body">$i18n.getText($action.message)</p>
@@ -22,40 +23,39 @@
                 <input class="text" type="text" id="txtSpaceKey" name="txtSpaceKey" required="true"><br>
             </div>
             <div class="field-group">
-                <button class="aui-button" id="addBtn">$i18n.getText("helloworld.lang.add")</button>
+                <button class="aui-button aui-button-primary" id="addBtn">$i18n.getText("helloworld.lang.add")</button>
             </div>
         </form>
-
+        <!-- Spaces table -->
         <table class="aui" id="space-table">
             <thead>
                 <tr>
                     <th class="radio-header"><input type="radio" disabled="true"></th>
-                    <th>$i18n.getText("helloworld.lang.key")</th>
-                    <th>$i18n.getText("helloworld.lang.spaceName")</th>
-                    <th>$i18n.getText("helloworld.lang.homePage")</th>
-                    <th>$i18n.getText("helloworld.lang.description")</th>
-                    <th>$i18n.getText("helloworld.lang.displayTitle")</th>
-                    
+                    <th class="space-key">$i18n.getText("helloworld.lang.key")</th>
+                    <th class="space-name">$i18n.getText("helloworld.lang.spaceName")</th>
+                    <th class="space-home">$i18n.getText("helloworld.lang.homePage")</th>
+                    <th class="space-description">$i18n.getText("helloworld.lang.description")</th>
+                    <th class="space-title">$i18n.getText("helloworld.lang.displayTitle")</th>
                     <th><span class="aui-icon aui-icon-small aui-iconfont-close-dialog delete-btn-header"></span></th>
                 </tr>
             </thead>
             <tbody>
                 #foreach($value in $spaceManager.getAllSpaces())
                 <tr>
-                    
+
                     <td class="radio-container">
                         <input class="radio" type="radio" name="radiobutton" value="$req.contextPath/plugins/spacelist/spacecontent.action?option=1&spacekey=$value.getKey()">
                     </td>
-                    <td>$value.getKey()</td>
-                    <td>
+                    <td class="space-key">$value.getKey()</td>
+                    <td class="space-name">
                         <a href="$req.contextPath/display/$value.getKey()" target="_blank">
                             $value.getName()
                         </a>
                     </td>
-                    <td>$value.getHomePage().getTitle()</td>
-                    <td>$value.getDescription().getDisplayTitle()</td>
-                    <td>$value.getDisplayTitle()</td>
-                    <td>
+                    <td class="space-home">$value.getHomePage().getTitle()</td>
+                    <td class="space-description">$value.getDescription().getBodyAsStringWithoutMarkup()</td>
+                    <td class="space-title">$value.getDisplayTitle()</td>
+                    <td class="del-space-btn">
                         <a href="$req.contextPath/plugins/spacelist/deletespace.action?option=3&spacekey=$value.getKey()">
                             <span class="aui-icon aui-icon-small aui-iconfont-close-dialog delete-btn"></span>
                         </a>
@@ -64,7 +64,7 @@
                 #end
             </tbody>
         </table>
-
+        <!-- Pages select -->
         <form class="aui" id="pages" style="display: none;">
             <label id="combobox-label" for="page-select"></label>
             <p>
@@ -72,28 +72,43 @@
                 </select>
             </p>
         </form>
-        <section role="dialog" id="attachment-dialog" class="aui-layer aui-dialog2 aui-dialog2-xlarge" aria-hidden="true">
+        <!-- attachment dialog -->
+        <section role="dialog" id="attachment-dialog" class="aui-layer aui-dialog2 aui-dialog2-xlarge" aria-hidden="true" data-aui-modal='true'>
             <header class="aui-dialog2-header">
                 <h1 class="aui-dialog2-header-main" id="dialog-header">Attachments</h1>
-                <a class="aui-dialog2-header-close">
-                    <span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
-                </a>
             </header>
             <div class="aui-dialog2-content">
                 <table class='aui' id="attachments-table">
                     <thead>
                         <tr>
-                            <th>$i18n.getText('helloworld.lang.name')</th>
-                            <th>$i18n.getText('helloworld.lang.size')</th>
-                            <th>$i18n.getText('helloworld.lang.creator')</th>
-                            <th>$i18n.getText('helloworld.lang.creationDate')</th>
+                            <th class="attachment-name">$i18n.getText('helloworld.lang.name')</th>
+                            <th class="attachment-size">$i18n.getText('helloworld.lang.size')</th>
+                            <th class="attachment-creator">$i18n.getText('helloworld.lang.creator')</th>
+                            <th class="attachment-creationDate">$i18n.getText('helloworld.lang.creationDate')</th>
                         </tr>
                     </thead>
                     <tbody id="attachment-table-body"></tbody>
                 </table>
             </div>
             <footer class="aui-dialog2-footer">
-                <div class="aui-dialog2-footer-hint">this is a hint</div>
+                <button id="attachments-close-button" class="aui-button">$i18n.getText('helloworld.lang.confirm.cancel')</button>
+            </footer>
+        </section>
+        <!-- confirm delete dialog -->
+        <section role="dialog" id="confirm-delete" class="aui-layer aui-dialog2 aui-dialog2-medium aui-dialog2-warning" aria-hidden="true" data-aui-modal='true'>
+            <header class="aui-dialog2-header">
+                <h1 class="aui-dialog2-header-main">$i18n.getText('helloworld.lang.confirm.warningTitle')</h1>
+            </header>
+            <div class="aui-dialog2-content" id="confirm-dialog">
+
+            </div>
+            <footer class="aui-dialog2-footer">
+                <div class="aui-dialog2-footer-actions">
+                    <button class="aui-button aui-button-primary" id="confirm-delete-btn">
+                        <a id="del-link">$i18n.getText('helloworld.lang.confirm.deleteSpace')</a>
+                    </button>
+                    <button id="confirm-close-button" class="aui-button">$i18n.getText('helloworld.lang.confirm.cancel')</button>
+                </div>
             </footer>
         </section>
     </body>

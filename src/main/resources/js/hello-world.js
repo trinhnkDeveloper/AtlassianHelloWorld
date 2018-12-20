@@ -3,6 +3,7 @@
  * GLOBAL VARIABLES
  */
 var __SUCCESS = "success", __ERROR = "error", __DELETED = "deleted";
+var __OPEN_PAGES_DIALOG = 1;
 /*
  * RUN SCRIPT
  */
@@ -10,6 +11,8 @@ $(document).ready(function () {
     showAllPages();
     successCreateSpace("status");
     showDialogAttachment();
+    getSpaceInfo();
+    closeDialog();
 });
 /*
  *  FUNCTION 
@@ -29,7 +32,7 @@ function getUrlParameter(sParam) {
         }
     }
 }
-
+/* message create space */
 function successCreateSpace(sParam) {
     var status = getUrlParameter("status");
     console.log(status);
@@ -37,16 +40,16 @@ function successCreateSpace(sParam) {
     if (status == __SUCCESS) {
         require('aui/flag')({
             type: "success",
-            title: 'New Space',
-            body: "New Space has been created."
+            title: AJS.I18n.getText("helloworld.lang.message.flagTitle"),
+            body: AJS.I18n.getText("helloworld.lang.message.newSpaceSucces"),
         });
     } else if (status == __ERROR) {
         $("#message01").show();
-    } else if( status == __DELETED){
+    } else if (status == __DELETED) {
         require('aui/flag')({
             type: "success",
-            title: 'New Space',
-            body: "Your Space has been deleted."
+            title: AJS.I18n.getText("helloworld.lang.message.flagTitleDelete"),
+            body: AJS.I18n.getText("helloworld.lang.message.spaceDeleted"),
         });
     }
 }
@@ -56,11 +59,12 @@ function successCreateSpace(sParam) {
  */
 function showAllPages() {
     $(":radio").click(function (e) {
+        __OPEN_PAGES_DIALOG = 1;
         $('#page-select').empty();
         var page = $(e.target);
         //var spaceName = page.attr("name");
         $.getJSON(page.attr("value"), function (data) {
-            $("#combobox-label").text( AJS.I18n.getText('helloworld.lang.choosePage') + ":");
+            $("#combobox-label").text(AJS.I18n.getText('helloworld.lang.choosePage') + ":");
             createComboBox(data);
         });
     });
@@ -69,8 +73,6 @@ function showAllPages() {
 function createComboBox(data) {
     $.each(data, function (index, object) {
         for (var key in object) {
-            var temp = document.createElement('option');
-            $('#page-select').append(temp);
             var option = document.createElement('option');
             option.setAttribute("value", key);
             option.setAttribute("name", object[key]);
@@ -81,20 +83,24 @@ function createComboBox(data) {
     });
     //show combobox
     $("#pages").css("display", "block");
-}   
+}
 /*
  * Pop up attachment
  * 
  */
+
 function showDialogAttachment() {
     // Shows the dialog when the "Show dialog" select is changed
-    AJS.$("#page-select").change(function () {
-        var pageId = $("#page-select option:selected").val();
-        var pageName = $("#page-select option:selected").text();
-        console.log(pageName);
-        $("#dialog-header").text(pageName);
-        popupAttachment(pageId);
-        AJS.dialog2("#attachment-dialog").show();
+    $("#page-select").click(function () {
+        console.log(__OPEN_PAGES_DIALOG);
+        if (__OPEN_PAGES_DIALOG % 2 == 0) {
+            var pageId = $("#page-select option:selected").val();
+            var pageName = $("#page-select option:selected").text();
+            $("#dialog-header").text(pageName);
+            popupAttachment(pageId);
+            AJS.dialog2("#attachment-dialog").show();
+        }
+        __OPEN_PAGES_DIALOG++;
     });
 }
 
@@ -113,25 +119,60 @@ function createTable(data) {
         link.setAttribute("download", object.name);
         var textName = document.createTextNode(object.name);
         datName.appendChild(link);
+        datName.setAttribute("class", "attachment-name");
         link.appendChild(textName);
 
         var datSize = document.createElement("td");
         var textSize = document.createTextNode(object.size);
+        datSize.setAttribute("class", "attachment-size");
         datSize.appendChild(textSize);
 
         var datCreator = document.createElement("td");
         var textCreator = document.createTextNode(object.creator);
+        datCreator.setAttribute("class", "attachment-creator");
         datCreator.appendChild(textCreator);
 
         var datDate = document.createElement('td');
         var textDate = document.createTextNode(object.creationDate);
+        datDate.setAttribute("class", "attachment-creationDate");
         datDate.appendChild(textDate);
 
         bodyRow.appendChild(datName);
         bodyRow.appendChild(datSize);
         bodyRow.appendChild(datCreator);
         bodyRow.appendChild(datDate);
-        console.log(bodyRow);
         $('#attachment-table-body').append(bodyRow);
+    });
+}
+
+/* show confirm delete dialog */
+function getSpaceInfo() {
+    $('.del-space-btn').click(function (e) {
+        e.preventDefault();
+        var target = e.target;
+        var parent = $(target).parent();
+        var url = $(parent).attr("href");
+        var parents = $(target).parentsUntil('tbody');
+        var datas = $(parents[parents.length - 1]).children();
+        var _space_name, _space_key;
+        for (var i = 0; i < datas.length; i++) {
+            if ($(datas[i]).hasClass("space-name")) {
+                _space_name = $(datas[i]).text();
+            } else if ($(datas[i]).hasClass("space-key")) {
+                _space_key = $(datas[i]).text();
+            }
+        }
+        $("#confirm-dialog").empty();
+        $("#confirm-dialog").append(AJS.I18n.getText("helloworld.lang.message.deleteConfirm") + _space_name + " - key:  " + _space_key);
+        $("#del-link").attr('href', url);
+        AJS.dialog2("#confirm-delete").show();
+    });
+}
+function closeDialog() {
+    $('#confirm-close-button').click(function () {
+        AJS.dialog2("#confirm-delete").hide();
+    });
+    $("#attachments-close-button").click(function () {
+        AJS.dialog2("#attachment-dialog").hide();
     });
 }

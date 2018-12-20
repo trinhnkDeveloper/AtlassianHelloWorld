@@ -28,12 +28,12 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
     private String action;
     private List<Map<String, String>> jsonResult;
     private static String message;
-    
-    public static String getMessage(){
+
+    public static String getMessage() {
         return message;
     }
-    
-    public static void setMessage(String message){
+
+    public static void setMessage(String message) {
         SpaceList.message = message;
     }
 
@@ -103,22 +103,29 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
         }
     }
 
+    /**
+     * Get all pages in space
+     *
+     * @param context
+     */
     public void handleOption1(ActionContext context) {
         jsonResult = new ArrayList<>();
-        System.out.println("i am here");
         String spaceKey = getParameter(context, "spacekey");
         Space space = manager.getSpace(spaceKey);
         List<Page> pages = pageManager.getPages(space, true);
         Map<String, String> pagesMap = new HashMap<>();
-        for(Page temp : pages){
-            System.out.println("hey");
+        for (Page temp : pages) {
             pagesMap.put(String.valueOf(temp.getId()), temp.getDisplayTitle());
-            System.out.println("id: " + String.valueOf(temp.getId()) + " - title: " + temp.getDisplayTitle());
         }
         jsonResult.add(pagesMap);
         action = "pages";
     }
 
+    /**
+     * Get all attachments in page
+     *
+     * @param context
+     */
     public void handleOption2(ActionContext context) {
         jsonResult = new ArrayList<>();
         String pageId = getParameter(context, "pageid");
@@ -128,9 +135,9 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
             Map<String, String> attachment = new LinkedHashMap<>();
             attachment.put("name", temp.getDisplayTitle());
             attachment.put("size", String.valueOf(temp.getFileSize()));
-            if(temp.getCreatorName() == null){
+            if (temp.getCreatorName() == null) {
                 attachment.put("creator", "");
-            }else{
+            } else {
                 attachment.put("creator", temp.getCreatorName());
             }
             attachment.put("creationDate", String.valueOf(temp.getCreationDate()));
@@ -138,11 +145,15 @@ public class SpaceList extends ConfluenceActionSupport implements Beanable {
             jsonResult.add(attachment);
         }
     }
-    
-    public void handleOption3(ActionContext context){
+
+    /**
+     * Delete space
+     *
+     * @param context
+     */
+    public void handleOption3(ActionContext context) {
         String spaceKey = getParameter(context, "spacekey");
         Space delSpace = manager.getSpace(spaceKey);
-        String spaceName = delSpace.getDisplayTitle();
         manager.removeSpace(delSpace);
     }
 }
