@@ -140,11 +140,16 @@ function createTable(data) {
         datDate.appendChild(textDate);
 
         var datIcon = document.createElement("td");
+        datIcon.setAttribute("class", "save-csv");
+        var span = document.createElement("span");
+        span.setAttribute("class", "aui-icon aui-icon-small aui-iconfont-page-default");
+        datIcon.appendChild(span);
 
         bodyRow.appendChild(datName);
         bodyRow.appendChild(datSize);
         bodyRow.appendChild(datCreator);
         bodyRow.appendChild(datDate);
+        bodyRow.appendChild(datIcon);
         $('#attachment-table-body').append(bodyRow);
     });
 }

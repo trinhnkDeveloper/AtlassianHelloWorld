@@ -87,6 +87,9 @@
             <action name="save-attachment" class="jp.co.kodnet.plugins.sample.allspace.AttachmentDownload">
                 <result name="success" type="json"></result>
             </action>
+            <action name="save-history" class="jp.co.kodnet.plugins.sample.allspace.AttachmentDownload" method="">
+                
+            </action>
         </package>
     </xwork>
 

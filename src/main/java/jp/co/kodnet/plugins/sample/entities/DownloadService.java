@@ -12,4 +12,6 @@ public interface DownloadService {
     AttachmentHistory add(String attachmentName, String userDownload, Date downloadTime);
 
     List<AttachmentHistory> all();
+    
+    List<AttachmentHistory> findByAttachmentName(String attachmentName);
 }

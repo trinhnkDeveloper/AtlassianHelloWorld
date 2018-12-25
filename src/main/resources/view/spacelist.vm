@@ -86,7 +86,7 @@
                                 <th class="attachment-size">$i18n.getText('helloworld.lang.size')</th>
                                 <th class="attachment-creator">$i18n.getText('helloworld.lang.creator')</th>
                                 <th class="attachment-creationDate">$i18n.getText('helloworld.lang.creationDate')</th>
-                                <th><span class="aui-icon aui-icon-small aui-iconfont-page-default"></span></th>
+                                <th class="save-csv"><span class="aui-icon aui-icon-small aui-iconfont-page-default"></span></th>
                             </tr>
                         </thead>
                         <tbody id="attachment-table-body"></tbody>

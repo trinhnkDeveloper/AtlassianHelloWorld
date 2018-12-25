@@ -2,6 +2,7 @@ package jp.co.kodnet.plugins.sample.allspace;
 
 import com.atlassian.confluence.core.ConfluenceActionSupport;
 import com.opensymphony.xwork.ActionContext;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import jp.co.kodnet.plugins.sample.entities.DownloadService;
@@ -22,6 +23,7 @@ public class AttachmentDownload extends ConfluenceActionSupport {
     @Override
     public String execute() throws Exception {
         doWhenDownload();
+        doDownloadInfo("user", "time");
         return SUCCESS;
     }
 
@@ -31,14 +33,22 @@ public class AttachmentDownload extends ConfluenceActionSupport {
         String userDownload = getParameter(context, "userName");
         Date downloadTime = new Date();
         downloadService.add(attachmentName, userDownload, downloadTime);
-        doDownloadInfo();
-    }
 
-    public void doDownloadInfo() {
+        // log to see the entities has been saved or not.
         List<AttachmentHistory> attachments = downloadService.all();
         for (AttachmentHistory attachment : attachments) {
             System.out.println(attachment.getAttachmentName());
         }
+
+    }
+
+    public void doDownloadInfo(String param1, String param2) throws IOException {
+        String header = param1 + "," + param2 + "\n";
+        String body = "";
+        for (AttachmentHistory history : downloadService.findByAttachmentName("Gliffy.png")) {
+            body += history.getUserDownload() + "," + history.getDownloadTime() + "\n";
+        }
+        String csv = header + body;
     }
 
     private String getParameter(ActionContext context, String key) {

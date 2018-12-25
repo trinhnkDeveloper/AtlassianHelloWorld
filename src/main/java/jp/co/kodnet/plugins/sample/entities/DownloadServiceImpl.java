@@ -4,6 +4,7 @@ import com.atlassian.activeobjects.external.ActiveObjects;
 import java.util.Date;
 import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
+import net.java.ao.Query;
 
 /**
  *
@@ -34,4 +35,9 @@ public class DownloadServiceImpl implements DownloadService {
         return newArrayList(ao.find(AttachmentHistory.class));
     }
 
+    @Override
+    public List<AttachmentHistory> findByAttachmentName(String attachmentName) {
+        List<AttachmentHistory> history = newArrayList(ao.find(AttachmentHistory.class, Query.select().where("ATTACHMENT_NAME = ?", attachmentName)));
+        return history;
+    }
 }
