@@ -5,8 +5,12 @@
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
-    </plugin-info>
-
+    </plugin-info>    
+    
+    <component key="download-service" class="jp.co.kodnet.plugins.sample.entities.DownloadServiceImpl">
+        <interface>jp.co.kodnet.plugins.sample.entities.DownloadService</interface>
+    </component>
+    
     <!-- add our i18n resource -->
     <resource type="i18n" name="hellworld" location="/resources/helloworld"/>
 
@@ -75,11 +79,22 @@
                 <result name="error" type="redirect">/plugins/spacelist/view.action?status=error</result>
             </action>
             <action name="spacecontent" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
-                <result name="success" type="json">/view/spacelist.vm</result>
+                <result name="success" type="json"></result>
             </action>
             <action name="deletespace" class="jp.co.kodnet.plugins.sample.allspace.SpaceList">
                 <result name="success" type="redirect">/plugins/spacelist/view.action?status=deleted</result>
             </action>
+            <action name="save-attachment" class="jp.co.kodnet.plugins.sample.allspace.AttachmentDownload">
+                <result name="success" type="json"></result>
+            </action>
         </package>
     </xwork>
+
+    <ao key="ao-module">
+        <entity>jp.co.kodnet.plugins.sample.entities.AttachmentHistory</entity>
+    </ao>
+    
+    <component-import key="ao" name="Active Objects service" interface="com.atlassian.activeobjects.external.ActiveObjects">
+          <description>Component to access Active Objects functionality from the plugin</description>
+    </component-import>
 </atlassian-plugin>

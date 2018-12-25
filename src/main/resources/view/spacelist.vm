@@ -10,7 +10,7 @@
     <body>
         <!-- Message -->
         <div id="message01" class="aui-message aui-message-error" style="display: none">
-            <p class="title"><strong>Error!</strong></p>
+            <p class="title"><strong>$i18n.getText('helloworld.lang.errorTitle')</strong></p>
             <p id="body">$i18n.getText($action.message)</p>
         </div>
         <form class="aui" action="$req.contextPath/plugins/spacelist/create.action" method="POST">
@@ -78,17 +78,20 @@
                 <h1 class="aui-dialog2-header-main" id="dialog-header">Attachments</h1>
             </header>
             <div class="aui-dialog2-content">
-                <table class='aui' id="attachments-table">
-                    <thead>
-                        <tr>
-                            <th class="attachment-name">$i18n.getText('helloworld.lang.name')</th>
-                            <th class="attachment-size">$i18n.getText('helloworld.lang.size')</th>
-                            <th class="attachment-creator">$i18n.getText('helloworld.lang.creator')</th>
-                            <th class="attachment-creationDate">$i18n.getText('helloworld.lang.creationDate')</th>
-                        </tr>
-                    </thead>
-                    <tbody id="attachment-table-body"></tbody>
-                </table>
+                <form action="$req.contextPath/plugins/servlet/download/attachment-download" method="POST">
+                    <table class='aui' id="attachments-table">
+                        <thead>
+                            <tr>
+                                <th class="attachment-name">$i18n.getText('helloworld.lang.name')</th>
+                                <th class="attachment-size">$i18n.getText('helloworld.lang.size')</th>
+                                <th class="attachment-creator">$i18n.getText('helloworld.lang.creator')</th>
+                                <th class="attachment-creationDate">$i18n.getText('helloworld.lang.creationDate')</th>
+                                <th><span class="aui-icon aui-icon-small aui-iconfont-page-default"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="attachment-table-body"></tbody>
+                    </table>
+                </form>
             </div>
             <footer class="aui-dialog2-footer">
                 <div class="aui-dialog2-footer-actions">

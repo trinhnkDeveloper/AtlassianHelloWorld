@@ -13,6 +13,7 @@ $(document).ready(function () {
     showDialogAttachment();
     getSpaceInfo();
     closeDialog();
+    submitAttachmentsDownloadInfo()
 });
 /*
  *  FUNCTION 
@@ -41,7 +42,7 @@ function successCreateSpace(sParam) {
         require('aui/flag')({
             type: "success",
             title: AJS.I18n.getText("helloworld.lang.message.flagTitle"),
-            body: AJS.I18n.getText("helloworld.lang.message.newSpaceSucces"),
+            body: AJS.I18n.getText("helloworld.lang.message.newSpaceSuccess"),
         });
     } else if (status == __ERROR) {
         $("#message01").show();
@@ -107,6 +108,7 @@ function showDialogAttachment() {
 function popupAttachment(pageid) {
     $.getJSON("spacecontent.action", {"pageid": pageid, "option": "2"}, function (data) {
         createTable(data);
+        submitAttachmentsDownloadInfo();
     });
 }
 
@@ -136,6 +138,8 @@ function createTable(data) {
         var textDate = document.createTextNode(object.creationDate);
         datDate.setAttribute("class", "attachment-creationDate");
         datDate.appendChild(textDate);
+
+        var datIcon = document.createElement("td");
 
         bodyRow.appendChild(datName);
         bodyRow.appendChild(datSize);
@@ -176,3 +180,21 @@ function closeDialog() {
         AJS.dialog2("#attachment-dialog").hide();
     });
 }
+function submitAttachmentsDownloadInfo() {
+    var links = $("#attachment-table-body .attachment-name");
+    $(links).click(function (e) {
+        var attachmentName = $(e.target).text();
+        var userName = AJS.params.remoteUser;
+        $.post("save-attachment.action", {
+            "attachmentName": attachmentName,
+            "userName": userName,
+        }, function (data, status) {
+            require('aui/flag')({
+                type: status,
+                title: AJS.I18n.getText("helloworld.lang.message.flagTitle"),
+                body: AJS.I18n.getText("helloworld.lang.message.newSpaceSuccess"),
+            });
+        });
+    });
+}
+    
