@@ -144,7 +144,7 @@ function createTable(data) {
         var datIcon = document.createElement("td");
         datIcon.setAttribute("class", "save-csv");
         var csvLink = document.createElement('a');
-        csvLink.setAttribute("target", "_blank");
+        csvLink.setAttribute("target", "_self");
         csvLink.setAttribute("href", "save-history.action?selectedAttach=" + object.name);
         datIcon.appendChild(csvLink);
         var span = document.createElement("span");
@@ -192,8 +192,9 @@ function closeDialog() {
     });
 }
 function submitAttachmentsDownloadInfo() {
-    var links = $("#attachment-table-body .attachment-name");
+    var links = $("td.attachment-name a");
     $(links).click(function (e) {
+        console.log(e.target);
         var attachmentName = $(e.target).text();
         var userName = AJS.params.remoteUser;
         $.post("save-attachment.action", {
@@ -202,8 +203,8 @@ function submitAttachmentsDownloadInfo() {
         }, function (data, status) {
             require('aui/flag')({
                 type: status,
-                title: AJS.I18n.getText("helloworld.lang.message.flagTitle"),
-                body: AJS.I18n.getText("helloworld.lang.message.newSpaceSuccess"),
+                title: AJS.I18n.getText("helloworld.lang.message.attachmentDownload.title"),
+                body: AJS.I18n.getText("helloworld.lang.message.attachmentDownload.success"),
             });
         });
     });

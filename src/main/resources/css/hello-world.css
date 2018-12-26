@@ -65,11 +65,10 @@ th.save-csv{
 }
 .save-csv{
     width: 1%;
-    color: #808080;
 }
-td.save-csv:hover{
+td.save-csv a:hover{
     cursor: pointer;
-    color: black
+    color:  #1d4062;
 }
 #confirm-delete-btn a{
     color: white;

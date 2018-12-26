@@ -30,6 +30,10 @@ public class AttachmentDownload extends ConfluenceActionSupport {
         return SUCCESS;
     }
 
+    /**
+     * Luu du lieu cua attachment khi duoc download vao db, du lieu duoc luu gom:
+     * ten attachment, user download, download time
+     */
     public void saveAttachmentHistory() {
         ActionContext context = ActionContext.getContext();
         String attachmentName = getParameter(context, "attachmentName");
@@ -45,16 +49,22 @@ public class AttachmentDownload extends ConfluenceActionSupport {
         System.out.println("\n");
     }
 
+    /**
+     * download file csv, du lieu download gom user download va download time
+     * @throws IOException 
+     */
     public void doDownloadInfo() throws IOException {
         String header = "userDownload,downloadTime\n";
         String body = createCSV();
 
         String csv = header + body;
         downloadCSV(csv);
-        System.out.println("\n file csv");
-        System.out.println(csv);
     }
 
+    /**
+     * Tao file csv
+     * @return chuoi string la noi dung cua file csv
+     */
     private String createCSV() {
         ActionContext context = ActionContext.getContext();
         String selectedAttach = getParameter(context, "selectedAttach");
@@ -65,6 +75,11 @@ public class AttachmentDownload extends ConfluenceActionSupport {
         return body;
     }
 
+    /**
+     * Tao ra download link
+     * @param csv: file csv can duoc download
+     * @throws IOException 
+     */
     private void downloadCSV(String csv) throws IOException {
         byte[] bytes = csv.getBytes();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -80,6 +95,12 @@ public class AttachmentDownload extends ConfluenceActionSupport {
         sos.close();
     }
 
+    /**
+     * Lay parameter
+     * @param context
+     * @param key
+     * @return 
+     */
     private String getParameter(ActionContext context, String key) {
         Object object = context.getParameters().get(key);
         if (object instanceof String[] && ((String[]) object).length != 0) {
