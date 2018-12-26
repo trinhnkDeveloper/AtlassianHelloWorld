@@ -22,4 +22,8 @@ public interface AttachmentHistory extends Entity {
     Date getDownloadTime();
 
     void setDownloadTime(Date downloadTime);
+
+    long getPageID();
+
+    void setPageID(long pageID);
 }

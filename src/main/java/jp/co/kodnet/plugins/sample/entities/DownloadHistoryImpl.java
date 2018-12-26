@@ -3,14 +3,14 @@ package jp.co.kodnet.plugins.sample.entities;
 import com.atlassian.activeobjects.external.ActiveObjects;
 import java.util.Date;
 import java.util.List;
-import static com.google.common.collect.Lists.newArrayList;
 import net.java.ao.Query;
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
  *
  * @author trinhnk
  */
-public class DownloadServiceImpl implements DownloadService {
+public class DownloadHistoryImpl implements DownloadHistory {
     private ActiveObjects ao;
 
     public void setAo(ActiveObjects ao) {
@@ -18,14 +18,12 @@ public class DownloadServiceImpl implements DownloadService {
     }
 
     @Override
-    public AttachmentHistory add(String attachmentName, String userDownload, Date downloadTime) {
-        if(ao == null){
-            System.out.println("null");
-        }
+    public AttachmentHistory add(String attachmentName, String userDownload, Date downloadTime, long pageID) {
         final AttachmentHistory da = ao.create(AttachmentHistory.class);
         da.setAttachmentName(attachmentName);
         da.setDownloadTime(downloadTime);
         da.setUserDownload(userDownload);
+        da.setPageID(pageID);
         da.save();
         return da;
     }
@@ -36,8 +34,8 @@ public class DownloadServiceImpl implements DownloadService {
     }
 
     @Override
-    public List<AttachmentHistory> findByAttachmentName(String attachmentName) {
-        List<AttachmentHistory> history = newArrayList(ao.find(AttachmentHistory.class, Query.select().where("ATTACHMENT_NAME = ?", attachmentName)));
+    public List<AttachmentHistory> findByAttachmentName(String attachmentName, long pageID) {
+        List<AttachmentHistory> history = newArrayList(ao.find(AttachmentHistory.class, Query.select().where("ATTACHMENT_NAME = ? AND PAGE_ID = ?", attachmentName, pageID)));
         return history;
     }
 }

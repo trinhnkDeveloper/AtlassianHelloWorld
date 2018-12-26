@@ -7,8 +7,8 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>    
     
-    <component key="download-service" class="jp.co.kodnet.plugins.sample.entities.DownloadServiceImpl">
-        <interface>jp.co.kodnet.plugins.sample.entities.DownloadService</interface>
+    <component key="download-service" class="jp.co.kodnet.plugins.sample.entities.DownloadHistoryImpl">
+        <interface>jp.co.kodnet.plugins.sample.entities.DownloadHistory</interface>
     </component>
     
     <!-- add our i18n resource -->

@@ -108,12 +108,14 @@ function showDialogAttachment() {
 
 function popupAttachment(pageid) {
     $.getJSON("spacecontent.action", {"pageid": pageid, "option": "2"}, function (data) {
-        createTable(data);
-        submitAttachmentsDownloadInfo();
+        createTable(data, pageid);
+        submitAttachmentsDownloadInfo(pageid);
     });
 }
 
-function createTable(data) {
+function createTable(data, pageid) {
+    console.log("hey hey i am creating attachment table");
+    $('#attachment-table-body').empty();
     $.each(data, function (index, object) {
         var bodyRow = document.createElement("tr");
         var datName = document.createElement("td");
@@ -145,7 +147,7 @@ function createTable(data) {
         datIcon.setAttribute("class", "save-csv");
         var csvLink = document.createElement('a');
         csvLink.setAttribute("target", "_self");
-        csvLink.setAttribute("href", "save-history.action?selectedAttach=" + object.name);
+        csvLink.setAttribute("href", "save-history.action?selectedAttach=" + object.name + "&pageid=" + pageid);
         datIcon.appendChild(csvLink);
         var span = document.createElement("span");
         span.setAttribute("class", "aui-icon aui-icon-small aui-iconfont-page-default");
@@ -191,7 +193,7 @@ function closeDialog() {
         AJS.dialog2("#attachment-dialog").hide();
     });
 }
-function submitAttachmentsDownloadInfo() {
+function submitAttachmentsDownloadInfo(pageID) {
     var links = $("td.attachment-name a");
     $(links).click(function (e) {
         console.log(e.target);
@@ -200,6 +202,7 @@ function submitAttachmentsDownloadInfo() {
         $.post("save-attachment.action", {
             "attachmentName": attachmentName,
             "userName": userName,
+            "pageID" : pageID,
         }, function (data, status) {
             require('aui/flag')({
                 type: status,

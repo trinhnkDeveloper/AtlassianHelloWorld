@@ -1,16 +1,19 @@
 package jp.co.kodnet.plugins.sample.allspace;
 
 import com.atlassian.confluence.core.ConfluenceActionSupport;
+import com.atlassian.confluence.pages.Page;
+import com.atlassian.confluence.pages.PageManager;
+import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionContext;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import jp.co.kodnet.plugins.sample.entities.DownloadService;
 import jp.co.kodnet.plugins.sample.entities.AttachmentHistory;
+import jp.co.kodnet.plugins.sample.entities.DownloadHistory;
 
 /**
  *
@@ -18,9 +21,10 @@ import jp.co.kodnet.plugins.sample.entities.AttachmentHistory;
  */
 public class AttachmentDownload extends ConfluenceActionSupport {
 
-    private DownloadService downloadService;
+    private DownloadHistory downloadService;
+    private PageManager pageManager = (PageManager) ContainerManager.getComponent("pageManager");
 
-    public void setDownloadService(DownloadService downloadService) {
+    public void setDownloadService(DownloadHistory downloadService) {
         this.downloadService = downloadService;
     }
 
@@ -31,63 +35,65 @@ public class AttachmentDownload extends ConfluenceActionSupport {
     }
 
     /**
-     * Luu du lieu cua attachment khi duoc download vao db, du lieu duoc luu gom:
-     * ten attachment, user download, download time
+     * Luu du lieu cua attachment khi duoc download vao db, du lieu duoc luu
+     * gom: ten attachment, user download, download time
      */
     public void saveAttachmentHistory() {
         ActionContext context = ActionContext.getContext();
         String attachmentName = getParameter(context, "attachmentName");
         String userDownload = getParameter(context, "userName");
+        long pageID = Long.parseLong(getParameter(context, "pageID"));
         Date downloadTime = new Date();
-        downloadService.add(attachmentName, userDownload, downloadTime);
-
-        // log to see the entities has been saved or not.
-        List<AttachmentHistory> attachments = downloadService.all();
-        for (AttachmentHistory attachment : attachments) {
-            System.out.println(attachment.getAttachmentName() + " - " + attachment.getUserDownload() + " - " + attachment.getDownloadTime());
-        }
-        System.out.println("\n");
+        downloadService.add(attachmentName, userDownload, downloadTime, pageID);
     }
 
     /**
      * download file csv, du lieu download gom user download va download time
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     public void doDownloadInfo() throws IOException {
-        String header = "userDownload,downloadTime\n";
-        String body = createCSV();
-
-        String csv = header + body;
-        downloadCSV(csv);
+        createCSV();
     }
 
     /**
      * Tao file csv
+     *
      * @return chuoi string la noi dung cua file csv
      */
-    private String createCSV() {
+    private void createCSV() throws IOException {
+        String header = "userDownload,downloadTime\n";
         ActionContext context = ActionContext.getContext();
         String selectedAttach = getParameter(context, "selectedAttach");
+        long pageID = Long.parseLong(getParameter(context, "pageid"));
         String body = "";
-        for (AttachmentHistory attachment : downloadService.findByAttachmentName(selectedAttach)) {
+        for (AttachmentHistory attachment : downloadService.findByAttachmentName(selectedAttach, pageID)) {
             body += attachment.getUserDownload() + "," + attachment.getDownloadTime() + ",\n";
         }
-        return body;
+        String csv = header + body;
+
+        Page page = pageManager.getPage(pageID);
+        String pageName = page.getDisplayTitle();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/YYYY");
+        Date now = new Date();
+        String fileName = pageName + "_" + selectedAttach + "_" + df.format(now) + ".csv";
+
+        downloadCSV(csv, fileName);
     }
 
     /**
      * Tao ra download link
+     *
      * @param csv: file csv can duoc download
-     * @throws IOException 
+     * @throws IOException
      */
-    private void downloadCSV(String csv) throws IOException {
+    private void downloadCSV(String csv, String fileName) throws IOException {
         byte[] bytes = csv.getBytes();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         HttpServletResponse res = ServletActionContext.getResponse();
         res.setContentType("text/txt");
-        String fileName = "attachment-history.csv";
-        res.setHeader("Content-Disposition","attachment; filename*=UTF-8''" + fileName);
-        
+        res.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + fileName);
+
         ServletOutputStream sos = res.getOutputStream();
         baos.write(bytes);
         baos.writeTo(sos);
@@ -97,9 +103,10 @@ public class AttachmentDownload extends ConfluenceActionSupport {
 
     /**
      * Lay parameter
+     *
      * @param context
      * @param key
-     * @return 
+     * @return
      */
     private String getParameter(ActionContext context, String key) {
         Object object = context.getParameters().get(key);
