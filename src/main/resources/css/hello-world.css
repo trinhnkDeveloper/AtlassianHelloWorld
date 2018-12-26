@@ -64,7 +64,7 @@ th.save-csv{
     visibility: hidden;
 }
 .save-csv{
-    width: 5%;
+    width: 1%;
     color: #808080;
 }
 td.save-csv:hover{

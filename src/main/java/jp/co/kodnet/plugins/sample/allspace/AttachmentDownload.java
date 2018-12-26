@@ -1,10 +1,14 @@
 package jp.co.kodnet.plugins.sample.allspace;
 
 import com.atlassian.confluence.core.ConfluenceActionSupport;
+import com.opensymphony.webwork.ServletActionContext;
 import com.opensymphony.xwork.ActionContext;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import jp.co.kodnet.plugins.sample.entities.DownloadService;
 import jp.co.kodnet.plugins.sample.entities.AttachmentHistory;
 
@@ -22,12 +26,11 @@ public class AttachmentDownload extends ConfluenceActionSupport {
 
     @Override
     public String execute() throws Exception {
-        doWhenDownload();
-        doDownloadInfo("user", "time");
+        saveAttachmentHistory();
         return SUCCESS;
     }
 
-    public void doWhenDownload() {
+    public void saveAttachmentHistory() {
         ActionContext context = ActionContext.getContext();
         String attachmentName = getParameter(context, "attachmentName");
         String userDownload = getParameter(context, "userName");
@@ -37,18 +40,44 @@ public class AttachmentDownload extends ConfluenceActionSupport {
         // log to see the entities has been saved or not.
         List<AttachmentHistory> attachments = downloadService.all();
         for (AttachmentHistory attachment : attachments) {
-            System.out.println(attachment.getAttachmentName());
+            System.out.println(attachment.getAttachmentName() + " - " + attachment.getUserDownload() + " - " + attachment.getDownloadTime());
         }
-
+        System.out.println("\n");
     }
 
-    public void doDownloadInfo(String param1, String param2) throws IOException {
-        String header = param1 + "," + param2 + "\n";
-        String body = "";
-        for (AttachmentHistory history : downloadService.findByAttachmentName("Gliffy.png")) {
-            body += history.getUserDownload() + "," + history.getDownloadTime() + "\n";
-        }
+    public void doDownloadInfo() throws IOException {
+        String header = "userDownload,downloadTime\n";
+        String body = createCSV();
+
         String csv = header + body;
+        downloadCSV(csv);
+        System.out.println("\n file csv");
+        System.out.println(csv);
+    }
+
+    private String createCSV() {
+        ActionContext context = ActionContext.getContext();
+        String selectedAttach = getParameter(context, "selectedAttach");
+        String body = "";
+        for (AttachmentHistory attachment : downloadService.findByAttachmentName(selectedAttach)) {
+            body += attachment.getUserDownload() + "," + attachment.getDownloadTime() + ",\n";
+        }
+        return body;
+    }
+
+    private void downloadCSV(String csv) throws IOException {
+        byte[] bytes = csv.getBytes();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HttpServletResponse res = ServletActionContext.getResponse();
+        res.setContentType("text/txt");
+        String fileName = "attachment-history.csv";
+        res.setHeader("Content-Disposition","attachment; filename*=UTF-8''" + fileName);
+        
+        ServletOutputStream sos = res.getOutputStream();
+        baos.write(bytes);
+        baos.writeTo(sos);
+        sos.flush();
+        sos.close();
     }
 
     private String getParameter(ActionContext context, String key) {

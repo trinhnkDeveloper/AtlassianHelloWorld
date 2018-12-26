@@ -13,7 +13,8 @@ $(document).ready(function () {
     showDialogAttachment();
     getSpaceInfo();
     closeDialog();
-    submitAttachmentsDownloadInfo()
+    submitAttachmentsDownloadInfo();
+    
 });
 /*
  *  FUNCTION 
@@ -139,11 +140,16 @@ function createTable(data) {
         datDate.setAttribute("class", "attachment-creationDate");
         datDate.appendChild(textDate);
 
+        
         var datIcon = document.createElement("td");
         datIcon.setAttribute("class", "save-csv");
+        var csvLink = document.createElement('a');
+        csvLink.setAttribute("target", "_blank");
+        csvLink.setAttribute("href", "save-history.action?selectedAttach=" + object.name);
+        datIcon.appendChild(csvLink);
         var span = document.createElement("span");
         span.setAttribute("class", "aui-icon aui-icon-small aui-iconfont-page-default");
-        datIcon.appendChild(span);
+        csvLink.appendChild(span);
 
         bodyRow.appendChild(datName);
         bodyRow.appendChild(datSize);
@@ -202,4 +208,3 @@ function submitAttachmentsDownloadInfo() {
         });
     });
 }
-    
