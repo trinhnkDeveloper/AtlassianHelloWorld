@@ -11,8 +11,18 @@
         <interface>jp.co.kodnet.plugins.sample.entities.DownloadHistory</interface>
     </component>
     
+    <xhtml-macro name="pages-title-macro" class="jp.co.kodnet.plugins.sample.macros.PagesTitleMacro" 
+                 icon="/download/resources/${project.groupId}.${project.artifactId}/images/pageTitleIcon.png" key="pages-title-macro">
+        <description key="helloworld.macros.pagetitle.desciption"/>
+        <category name="confluence-content"/>
+        <parameters>
+            <parameter name="Pages" type="confluence-content"/>
+        </parameters>
+    </xhtml-macro>
+    
     <!-- add our i18n resource -->
     <resource type="i18n" name="hellworld" location="/resources/helloworld"/>
+    <resource type="download" name="images/" location="/images"/>
 
     <!-- add our web resources -->
     <web-resource key="hello-world-resources" name="hello-world Web Resources">
@@ -27,7 +37,7 @@
         <dependency>com.atlassian.auiplugin:aui-experimental-iconfont</dependency>
         <resource type="download" name="hello-world.css" location="css/hello-world.css"/>
         <resource type="download" name="hello-world.js" location="js/hello-world.js"/>
-        <resource type="download" name="images/" location="/images"/>
+        
         <transformation extension="js">
             <transformer key="jsI18n"/>
         </transformation>
@@ -98,6 +108,6 @@
     </ao>
     
     <component-import key="ao" name="Active Objects service" interface="com.atlassian.activeobjects.external.ActiveObjects">
-          <description>Component to access Active Objects functionality from the plugin</description>
+        <description>Component to access Active Objects functionality from the plugin</description>
     </component-import>
 </atlassian-plugin>

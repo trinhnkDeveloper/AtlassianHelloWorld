@@ -1,0 +1,9 @@
+#requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
+<h1>$i18n.getText("helloworld.macros.velocity.lang.title")</h1>
+<ul>
+    #foreach($key in $pages.keySet())
+    <li>
+        <a href="$req.contextPath/pages/viewpage.action?pageId=$key" target="_blank">$pages.get($key)</a>
+    </li>
+    #end
+</ul>
