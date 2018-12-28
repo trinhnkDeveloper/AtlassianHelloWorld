@@ -8,7 +8,17 @@
     #end
 </ul>
 #if($notFound == 1)
-<p>Not Found</p>
+<div class="aui-message aui-message-error">
+    <p class="title">
+        <strong>$i18n.getText("helloworld.lang.errorTitle")</strong>
+    </p>
+    <p>$i18n.getText("helloworld.macros.velocity.lang.mess.pageNotFound")</p>
+</div>
 #elseif($spaceNotFound ==1)
-<p>Space not found</p>
+<div class="aui-message aui-message-error">
+    <p class="title">
+        <strong>$i18n.getText("helloworld.lang.errorTitle")</strong>
+    </p>
+    <p>$i18n.getText("helloworld.macros.velocity.lang.mess.spaceNotFound")</p>
+</div>
 #end
