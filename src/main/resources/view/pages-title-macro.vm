@@ -1,5 +1,11 @@
 #requireResource("jp.co.kodnet.plugins.sample.hello-world:hello-world-resources")
-<h1>$i18n.getText("helloworld.macros.velocity.lang.title")</h1>
+#if($notFound == 1)
+    <p>$i18n.getText("helloworld.macros.velocity.lang.mess.pageNotFound")</p>
+#elseif($spaceNotFound ==1)
+    <p>$i18n.getText("helloworld.macros.velocity.lang.mess.spaceNotFound")</p>
+#elseif($noChild ==1 )
+    <p>No child</p>
+#end
 <ul>
     #foreach($key in $pages.keySet())
     <li>
@@ -7,18 +13,4 @@
     </li>
     #end
 </ul>
-#if($notFound == 1)
-<div class="aui-message aui-message-error">
-    <p class="title">
-        <strong>$i18n.getText("helloworld.lang.errorTitle")</strong>
-    </p>
-    <p>$i18n.getText("helloworld.macros.velocity.lang.mess.pageNotFound")</p>
-</div>
-#elseif($spaceNotFound ==1)
-<div class="aui-message aui-message-error">
-    <p class="title">
-        <strong>$i18n.getText("helloworld.lang.errorTitle")</strong>
-    </p>
-    <p>$i18n.getText("helloworld.macros.velocity.lang.mess.spaceNotFound")</p>
-</div>
-#end
+

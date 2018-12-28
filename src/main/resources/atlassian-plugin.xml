@@ -11,12 +11,12 @@
         <interface>jp.co.kodnet.plugins.sample.entities.DownloadHistory</interface>
     </component>
     
-    <xhtml-macro name="pages-title-macro" class="jp.co.kodnet.plugins.sample.macros.PagesTitleMacro" 
-                 icon="/download/resources/${project.groupId}.${project.artifactId}/images/pageTitleIcon.png" key="pages-title-macro">
-        <description key="helloworld.macros.pagetitle.desciption"/>
+    <xhtml-macro name="page-title-macro" class="jp.co.kodnet.plugins.sample.macros.PagesTitleMacro" 
+                 icon="/download/resources/${project.groupId}.${project.artifactId}/images/pageTitleIcon.png" key="page-title-macro">
+        <description/>
         <category name="confluence-content"/>
         <parameters>
-            <parameter name="Pages" type="confluence-content"/>
+            <parameter name="pages" type="confluence-content"/>
         </parameters>
     </xhtml-macro>
     

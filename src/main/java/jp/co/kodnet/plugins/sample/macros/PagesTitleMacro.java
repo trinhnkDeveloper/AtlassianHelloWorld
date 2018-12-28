@@ -11,7 +11,7 @@ import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.util.i18n.I18NBean;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
 import com.atlassian.spring.container.ContainerManager;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -36,7 +36,7 @@ public class PagesTitleMacro implements Macro {
     @Override
     public String execute(Map<String, String> map, String string, ConversionContext cc) throws MacroExecutionException {
         Map<String, Object> context;
-        String param = map.get("Pages");
+        String param = map.get("pages");
 
         if (param != null) {
             if (isContainColon(param)) {
@@ -54,18 +54,27 @@ public class PagesTitleMacro implements Macro {
     private Map<String, Object> getPagesMap(Page page) {
         Map<String, Object> context = MacroUtils.defaultVelocityContext();
         if (page != null) {
-            Map<String, String> pagesMap = new HashMap<>();
-            pagesMap.put(String.valueOf(page.getId()), page.getDisplayTitle());
-            if (page.hasChildren()) {
-                for (Page child : page.getChildren()) {
-                    pagesMap.put(String.valueOf(child.getId()), child.getDisplayTitle());
-                }
+            if ((int) getChildPagesMap(page).get("noChild") != 1) {
+                context.put("pages", getChildPagesMap(page));
+            } else {
+                context.put("noChild", 1);
             }
-            context.put("pages", pagesMap);
         } else {
             context.put("notFound", 1);
         }
         return context;
+    }
+
+    private Map<String, Object> getChildPagesMap(Page page) {
+        Map<String, Object> pagesMap = new LinkedHashMap<>();
+        if (page.hasChildren()) {
+            for (Page child : page.getChildren()) {
+                pagesMap.put(String.valueOf(child.getId()), child.getDisplayTitle());
+            }
+        } else {
+            pagesMap.put("noChild", 1);
+        }
+        return pagesMap;
     }
 
     //get pages title when there are no space key in parameter
