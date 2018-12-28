@@ -6,6 +6,7 @@ import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
+import com.atlassian.confluence.spaces.Space;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.util.i18n.I18NBean;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
@@ -34,28 +35,84 @@ public class PagesTitleMacro implements Macro {
 
     @Override
     public String execute(Map<String, String> map, String string, ConversionContext cc) throws MacroExecutionException {
-        Map<String, Object> context = MacroUtils.defaultVelocityContext();
-        String pageName = map.get("Pages");
-        String spaceKey = cc.getSpaceKey();
-        if (pageName != null) {
-            Map<String, String> pagesMap = getPagesMap(pageName, spaceKey);
-            context.put("pages", pagesMap);
+        Map<String, Object> context = null;
+        String param = map.get("Pages");
+
+        if (param != null) {
+            if (isContainColon(param)) {
+                context = doGetPagesTitle(param, cc);
+            } else {
+                context = getPagesTitle(param, cc);
+            }
+        }else{
+            context = MacroUtils.defaultVelocityContext();
+            context.put("notFound", 1);
         }
         return VelocityUtils.getRenderedTemplate(PAGE_TITLE_MACRO, context);
     }
 
-    private Map<String, String> getPagesMap(String pageName, String spaceKey) {
+    private Map<String, String> getPagesMap(Page page) {
         Map<String, String> pagesMap = new HashMap<>();
-        Page page = pageManager.getPage(spaceKey, pageName);
-        if (page != null) {
-            pagesMap.put(String.valueOf(page.getId()), page.getDisplayTitle());
-            if (page.hasChildren()) {
-                for (Page child : page.getChildren()) {
-                    pagesMap.put(String.valueOf(child.getId()), child.getDisplayTitle());
-                }
+        pagesMap.put(String.valueOf(page.getId()), page.getDisplayTitle());
+        if (page.hasChildren()) {
+            for (Page child : page.getChildren()) {
+                pagesMap.put(String.valueOf(child.getId()), child.getDisplayTitle());
             }
         }
         return pagesMap;
+    }
+
+    //get pages title when there are no space key in parameter
+    public Map<String, Object> getPagesTitle(String param, ConversionContext cc) {
+        Map<String, Object> context = MacroUtils.defaultVelocityContext();
+        String spaceKey = cc.getSpaceKey();
+        Page page = pageManager.getPage(spaceKey, param);
+        if (page != null) {
+            context.put("pages", getPagesMap(page));
+        } else {
+            context.put("notFound", 1);
+        }
+        return context;
+    }
+
+    public Map<String, Object> doGetPagesTitle(String param, ConversionContext cc) {
+        if (isPageOfCurrentSpace(param, cc)) {
+            return getPagesTitle(param, cc);
+        } else {
+            return getPageInOtherSpace(param, cc);
+        }
+    }
+
+    public boolean isPageOfCurrentSpace(String param, ConversionContext cc) {
+        String spaceKey = cc.getSpaceKey();
+        Page page = pageManager.getPage(spaceKey, param);
+        if (page != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public Map<String, Object> getPageInOtherSpace(String param, ConversionContext cc) {
+        Map<String, Object> context = MacroUtils.defaultVelocityContext();
+        String key = param.substring(0, param.indexOf(":"));
+        String pageTitle = param.substring(param.indexOf(":") + 1);
+        Space space = spaceManager.getSpace(key);
+        if (space != null) {
+            Page page = pageManager.getPage(key, pageTitle);
+            if (page != null) {
+                context.put("pages", getPagesMap(page));
+            } else {
+                context.put("notFound", 1);
+            }
+            return context;
+        }else{
+            context.put("spaceNotFound", 1);
+            return context;
+        }
+    }
+
+    public boolean isContainColon(String param) {
+        return param.contains(":");
     }
 
     @Override

@@ -7,3 +7,8 @@
     </li>
     #end
 </ul>
+#if($notFound == 1)
+<p>Not Found</p>
+#elseif($spaceNotFound ==1)
+<p>Space not found</p>
+#end
