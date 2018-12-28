@@ -35,7 +35,7 @@ public class PagesTitleMacro implements Macro {
 
     @Override
     public String execute(Map<String, String> map, String string, ConversionContext cc) throws MacroExecutionException {
-        Map<String, Object> context = null;
+        Map<String, Object> context;
         String param = map.get("Pages");
 
         if (param != null) {
@@ -44,34 +44,36 @@ public class PagesTitleMacro implements Macro {
             } else {
                 context = getPagesTitle(param, cc);
             }
-        }else{
+        } else {
             context = MacroUtils.defaultVelocityContext();
             context.put("notFound", 1);
         }
         return VelocityUtils.getRenderedTemplate(PAGE_TITLE_MACRO, context);
     }
 
-    private Map<String, String> getPagesMap(Page page) {
-        Map<String, String> pagesMap = new HashMap<>();
-        pagesMap.put(String.valueOf(page.getId()), page.getDisplayTitle());
-        if (page.hasChildren()) {
-            for (Page child : page.getChildren()) {
-                pagesMap.put(String.valueOf(child.getId()), child.getDisplayTitle());
+    private Map<String, Object> getPagesMap(Page page) {
+        Map<String, Object> context = MacroUtils.defaultVelocityContext();
+        if (page != null) {
+            Map<String, String> pagesMap = new HashMap<>();
+            pagesMap.put(String.valueOf(page.getId()), page.getDisplayTitle());
+            if (page.hasChildren()) {
+                for (Page child : page.getChildren()) {
+                    pagesMap.put(String.valueOf(child.getId()), child.getDisplayTitle());
+                }
             }
+            context.put("pages", pagesMap);
+        } else {
+            context.put("notFound", 1);
         }
-        return pagesMap;
+        return context;
     }
 
     //get pages title when there are no space key in parameter
     public Map<String, Object> getPagesTitle(String param, ConversionContext cc) {
-        Map<String, Object> context = MacroUtils.defaultVelocityContext();
+        Map<String, Object> context;
         String spaceKey = cc.getSpaceKey();
         Page page = pageManager.getPage(spaceKey, param);
-        if (page != null) {
-            context.put("pages", getPagesMap(page));
-        } else {
-            context.put("notFound", 1);
-        }
+        context = getPagesMap(page);
         return context;
     }
 
@@ -93,19 +95,16 @@ public class PagesTitleMacro implements Macro {
     }
 
     public Map<String, Object> getPageInOtherSpace(String param, ConversionContext cc) {
-        Map<String, Object> context = MacroUtils.defaultVelocityContext();
+        Map<String, Object> context;
         String key = param.substring(0, param.indexOf(":"));
         String pageTitle = param.substring(param.indexOf(":") + 1);
         Space space = spaceManager.getSpace(key);
         if (space != null) {
             Page page = pageManager.getPage(key, pageTitle);
-            if (page != null) {
-                context.put("pages", getPagesMap(page));
-            } else {
-                context.put("notFound", 1);
-            }
+            context = getPagesMap(page);
             return context;
-        }else{
+        } else {
+            context = MacroUtils.defaultVelocityContext();
             context.put("spaceNotFound", 1);
             return context;
         }
